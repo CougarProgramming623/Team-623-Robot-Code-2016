@@ -1,0 +1,34 @@
+
+Joystick
+	Aiming the Scoop
+		45 degree button
+		0 degree button
+		Joystick for manually aiming scoop, with fast and slow settings
+		Bottom position for chifal de freize (see saw)
+		Button to lift chifal de freize (see saw)
+	Drive train
+		4 motor controller (2 per tread) currently single joystick (if needed change to tank drive)
+	
+Buttons
+	Ball Pickup/Shooter
+		Auto-Shoot - press and hold to shoot [B]
+			press:
+				find, reposition and aim at target
+				bring shooter motor up to full speed
+				push ball into shooter (trigger motor)
+			release:
+				all motors to default speeds and shooter to default position
+		Pickup
+			press and hold:
+				manual up and down (pickup section) [B] [B]
+				Positions:
+					Obstacles [B]
+					Ball Pickup [B]
+					Default (little above ball pickup) [B]
+					Shooting [B]
+					All the way in (safety) [B]
+			release:
+				to preset position
+		Robot Lifter
+			Release (push) [B]
+			Up and down (push and hold) [B] [B]
