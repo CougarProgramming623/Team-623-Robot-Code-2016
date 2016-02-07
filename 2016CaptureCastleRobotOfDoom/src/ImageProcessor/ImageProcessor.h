@@ -7,17 +7,22 @@
 
 #ifndef SRC_SUBSYSTEMS_IMAGEPROCESSOR_H_
 #define SRC_SUBSYSTEMS_IMAGEPROCESSOR_H_
-//Define Constants!!!
-#define MASK 0x40
-#define WIDTH 320
-#define HEIGHT 240
-#include <vector>
+#include <list>
 #include <math.h>
 #include <stdio.h>
 #include <iostream>
 #include "image.h"
 
 using namespace std;
+
+//Define Constants!!!
+#define MASK 0x40
+#define WIDTH 320
+#define HEIGHT 240
+
+enum AVG_ARG {
+	ORIGINAL, MASKED
+};
 
 class Point {
 	private:
@@ -31,6 +36,7 @@ class Point {
 		double getY();
 		double distace(Point*);
 		bool equals(Point*);
+		bool equals(Point);
 };
 
 class ImageVector {
@@ -38,7 +44,9 @@ class ImageVector {
 		Point *pointInital , *pointFinal , *pointMiddle;
 		double dx , dy;
 	public:
+		ImageVector& operator=(const ImageVector);
 		ImageVector(Point* , Point*);
+		ImageVector(Point& , Point&);
 		ImageVector(double , double);
 		ImageVector(double , double , double , double);
 		double getMagnitude();
@@ -53,17 +61,18 @@ class ImageVector {
 
 class ImageProcessor {
 	private:
+		Point* center;
 		Image* image;
-		bool maskedImage[320][240] , processedImage[320][240];
-		vector<ImageVector>horizontal , vertical;
-		double getAverage();
+		list<ImageVector>*horizontal , *vertical;
+		bool maskedImage[WIDTH][HEIGHT] , processedImage[WIDTH][HEIGHT];
+		double getAverage(AVG_ARG , int , int);
 	public:
 		ImageProcessor(Image* image);
 		~ImageProcessor();
 		void applyMask();
 		void process();
 		void findCenter();
-		float RGBtoHue(int , int , int);
+		Point getCenter();
 };
 
 #endif /* SRC_SUBSYSTEMS_IMAGEPROCESSOR_H_ */

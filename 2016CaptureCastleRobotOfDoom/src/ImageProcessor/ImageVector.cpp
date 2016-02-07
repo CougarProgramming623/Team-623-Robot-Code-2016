@@ -20,6 +20,10 @@ ImageVector::ImageVector(Point* inital , Point* end)
 		: ImageVector(inital->getX() , inital->getY() , end->getX() , end->getY()) {
 }
 
+ImageVector::ImageVector(Point& inital , Point& end)
+		: ImageVector(inital.getX() , inital.getY() , end.getX() , end.getY()) {
+}
+
 ImageVector::ImageVector(double x , double y)
 		: ImageVector(x , y , 0 , 0) {
 

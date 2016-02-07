@@ -39,3 +39,7 @@ double Point::distace(Point* point) {
 bool Point::equals(Point* point) {
 	return point->x == x && point->y == y;
 }
+
+bool Point::equals(Point point) {
+	return point.x == x && point.y == y;
+}
