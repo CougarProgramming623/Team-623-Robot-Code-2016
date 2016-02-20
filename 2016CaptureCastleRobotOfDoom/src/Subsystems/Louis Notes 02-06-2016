@@ -32,3 +32,10 @@ Buttons (2/10 Total Buttons: 11)
 		Robot Lifter
 			Release (push and hold) [B]
 			Up and down (push and hold) [B] [B]
+					
+Autonomous Notes: (Updated: 2/20/16)
+	1. Distance to secret passage ~72.299 inches
+	2. Distance through low bar and to about shooting position ~288.351 inches (+ 12 points)
+	3. Turn ~120.39 degrees
+	4. Shoot Ball (+ 10 points)
+	
