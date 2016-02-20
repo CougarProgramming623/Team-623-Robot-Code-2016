@@ -19,6 +19,7 @@ using namespace std;
 #define MASK 0x40
 #define WIDTH 320
 #define HEIGHT 240
+#define SCALE .5
 
 enum AVG_ARG {
 	ORIGINAL, MASKED
@@ -49,8 +50,8 @@ class ImageVector {
 		ImageVector(Point& , Point&);
 		ImageVector(double , double);
 		ImageVector(double , double , double , double);
-		double getMagnitude();
 		Point* getMiddle();
+		double getMagnitude();
 		double getAngleRadian(ImageVector*);
 		double getAngleDegree(ImageVector*);
 		double dot(ImageVector*);

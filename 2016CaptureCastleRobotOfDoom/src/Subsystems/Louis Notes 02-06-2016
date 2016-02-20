@@ -9,7 +9,7 @@ Joystick
 	Drive train
 		4 motor controller (2 per tread) currently single joystick (if needed change to tank drive)
 	
-Buttons
+Buttons (2/10 Total Buttons: 11)
 	Ball Pickup/Shooter
 		Auto-Shoot - press and hold to shoot [B]
 			press:
