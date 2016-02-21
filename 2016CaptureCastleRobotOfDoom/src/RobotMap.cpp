@@ -40,7 +40,7 @@ void RobotMap::init() {
 	//Sensors
 	accelerometer = new AnalogAccelerometer(ACCELEROMETER);
 	potentiometer = new AnalogPotentiometer(POTENTIOMETER);
-	gyro = new AnalogGyro(GYRO); // TODO: Ask Tom
+//	gyro = new AnalogGyro(GYRO); // TODO: Ask Tom
 
 	//Drive
 	robotDriveTreadRightFront = new Talon(FRONT_RIGHT);

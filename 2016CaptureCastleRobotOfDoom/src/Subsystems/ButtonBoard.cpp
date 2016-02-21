@@ -4,12 +4,12 @@
  *  Created on: Feb 20, 2016
  *      Author: CougarRobotics
  */
-#include "ButtonBoard.h"
 #include "Joystick.h"
 #include "Buttons/JoystickButton.h"
+#include "ButtonBoard.h"
 
-ButtonBoard::ButtonBoard():Joystick(BUTTON_BOARD_PORT)
- {
+ButtonBoard::ButtonBoard()
+		: Joystick(BUTTON_BOARD_PORT) {
 	shoot = new JoystickButton(this , PORT_SHOOT);
 	pickup_up = new JoystickButton(this , PORT_PICKUP_U);
 	pickup_down = new JoystickButton(this , PORT_PICKUP_D);
@@ -21,6 +21,20 @@ ButtonBoard::ButtonBoard():Joystick(BUTTON_BOARD_PORT)
 	robot_lifter_release = new JoystickButton(this , PORT_RL_R);
 	robot_lifter_up = new JoystickButton(this , PORT_RL_U);
 	robot_lifter_down = new JoystickButton(this , PORT_RL_D);
+}
+
+ButtonBoard::~ButtonBoard() {
+	delete shoot;
+	delete pickup_up;
+	delete pickup_down;
+	delete pos_obstacle;
+	delete pos_ball_pickup;
+	delete pos_default;
+	delete pos_shooting;
+	delete pos_saftey;
+	delete robot_lifter_release;
+	delete robot_lifter_up;
+	delete robot_lifter_down;
 }
 
 bool ButtonBoard::getShoot() {
