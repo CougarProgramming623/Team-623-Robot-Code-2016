@@ -11,8 +11,8 @@
 ButtonBoard::ButtonBoard()
 		: Joystick(BUTTON_BOARD_PORT) {
 	shoot = new JoystickButton(this , PORT_SHOOT);
-	pickup_up = new JoystickButton(this , PORT_PICKUP_U);
-	pickup_down = new JoystickButton(this , PORT_PICKUP_D);
+	SAD_up = new JoystickButton(this , PORT_SAD_U);
+	SAD_down = new JoystickButton(this , PORT_SAD_D);
 	pos_obstacle = new JoystickButton(this , PORT_POS_OBT);
 	pos_ball_pickup = new JoystickButton(this , PORT_POS_BALL_PKU);
 	pos_default = new JoystickButton(this , PORT_POS_DEFAULT);
@@ -25,8 +25,8 @@ ButtonBoard::ButtonBoard()
 
 ButtonBoard::~ButtonBoard() {
 	delete shoot;
-	delete pickup_up;
-	delete pickup_down;
+	delete SAD_up;
+	delete SAD_down;
 	delete pos_obstacle;
 	delete pos_ball_pickup;
 	delete pos_default;
@@ -41,12 +41,12 @@ bool ButtonBoard::getShoot() {
 	return shoot->Get();
 }
 
-bool ButtonBoard::getPickupUp() {
-	return pickup_up->Get();
+bool ButtonBoard::getSADUp() {
+	return SAD_up->Get();
 }
 
-bool ButtonBoard::getPickupDown() {
-	return pickup_down->Get();
+bool ButtonBoard::getSADDown() {
+	return SAD_down->Get();
 }
 
 int ButtonBoard::getPos() {

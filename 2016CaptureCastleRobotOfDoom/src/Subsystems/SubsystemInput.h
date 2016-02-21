@@ -10,11 +10,13 @@
 #include "Commands/Subsystem.h"
 #include "WPILib.h"
 
-class SubsystemInput:public Subsystem {
-public:
-	AnalogPotentiometer* potentiometer;
-	SubsystemInput();
-	void InitDefaultCommand();
+class SubsystemInput : public Subsystem {
+	public:
+		AnalogPotentiometer* potentiometer;
+		AnalogAccelerometer* accelerometer;
+		AnalogGyro* gyro;
+		SubsystemInput();
+		void InitDefaultCommand();
 };
 
 #endif /* SRC_SUBSYSTEMS_SUBSYSTEMINPUT_H_ */

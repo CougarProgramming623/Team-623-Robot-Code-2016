@@ -11,6 +11,8 @@ SubsystemInput::SubsystemInput() :
 		Subsystem("Subsystem Input") {
 
 	potentiometer = RobotMap::potentiometer;
+	accelerometer = RobotMap::accelerometer;
+	gyro = RobotMap::gyro;
 }
 
 void SubsystemInput::InitDefaultCommand() {

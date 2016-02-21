@@ -18,12 +18,12 @@ SpeedController* RobotMap::robotDriveTreadLeftFront = NULL;
 SpeedController* RobotMap::robotDriveTreadLeftBack = NULL;
 SpeedController* RobotMap::ballShooterSpinnerClockwise = NULL;
 SpeedController* RobotMap::ballShooterSpinnerCounterclockwise = NULL;
-SpeedController* RobotMap::ballShooterSpinnerSpringWinder = NULL;
-SpeedController* RobotMap::lifter = NULL;
+Relay* RobotMap::ballShooterSpinnerSpringWinder = NULL;
+Relay* RobotMap::lifter = NULL;
 SpeedController* RobotMap::position = NULL;
 
 RobotDrive* RobotMap::robotDrive41 = NULL;
-RobotDrive* RobotMap::shooter = NULL;
+RobotDrive* RobotMap::shooterAimingDevice = NULL;
 
 AnalogPotentiometer* RobotMap::potentiometer = NULL;
 AnalogAccelerometer* RobotMap::accelerometer = NULL;
@@ -77,19 +77,19 @@ void RobotMap::init() {
 	ballShooterSpinnerCounterclockwise = new Talon(SPINNER_CCW);
 	lw->AddActuator("Ball Shooter" , "clockwise spinner" , (Talon*) ballShooterSpinnerCounterclockwise);
 
-	ballShooterSpinnerSpringWinder = new Talon(SPINNER_SPRING_WINDER);
-	lw->AddActuator("Ball Shooter" , "spinner spring winder" , (Talon*) ballShooterSpinnerSpringWinder);
+	ballShooterSpinnerSpringWinder = new Relay(SPINNER_SPRING_WINDER);
+	lw->AddActuator("Ball Shooter" , "spinner spring winder" , (Relay*) ballShooterSpinnerSpringWinder);
 
-	shooter = new RobotDrive(ballShooterSpinnerClockwise , ballShooterSpinnerCounterclockwise , NULL , NULL);
+	shooterAimingDevice = new RobotDrive(ballShooterSpinnerClockwise , ballShooterSpinnerCounterclockwise , NULL , NULL);
 
-	shooter->SetSafetyEnabled(true);
-	shooter->SetExpiration(0.1);
-	shooter->SetSensitivity(0.5);
-	shooter->SetMaxOutput(0.5);
-	shooter->SetInvertedMotor(RobotDrive::kRearLeftMotor , true);
+	shooterAimingDevice->SetSafetyEnabled(true);
+	shooterAimingDevice->SetExpiration(0.1);
+	shooterAimingDevice->SetSensitivity(0.5);
+	shooterAimingDevice->SetMaxOutput(0.5);
+	shooterAimingDevice->SetInvertedMotor(RobotDrive::kRearLeftMotor , true);
 
-	lifter = new Talon(LIFTER);
-	lw->AddActuator("MCL" , "lifter" , (Talon*) lifter);
+	lifter = new Relay(LIFTER);
+	lw->AddActuator("MCL" , "lifter" , (Relay*) lifter);
 
 	position = new Talon(POSITION);
 	lw->AddActuator("MCL" , "position" , (Talon*) position);

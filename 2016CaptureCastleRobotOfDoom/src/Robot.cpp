@@ -94,24 +94,41 @@ void Robot::TeleopPeriodic() {
 
 	//The Button of the All Mighty Board of Buttons
 	ButtonBoard* btnBoard = oi->getBtnBoard();
-	if(btnBoard->getPickupUp()) {
+	if(btnBoard->getSADUp()) {
 		subsystemBallShooter->spinnerCounterclockwise->Set(0);
 		subsystemBallShooter->spinnerClockwise->Set(0);
-//		TODO: Create something to move pickup up and down
+		if(subsystemInput->potentiometer->Get() > SAD_UP_POT) {
+			subsystemBallShooter->shooterAimingDevice->Set(1);
+		}
+		else if(subsystemInput->potentiometer->Get() < SAD_UP_POT) {
+			subsystemBallShooter->shooterAimingDevice->Set(-1);
+		}
 	}
 
-	if(btnBoard->getPickupDown()) {
-		subsystemBallShooter->spinnerCounterclockwise->Set(-.5);
-		subsystemBallShooter->spinnerClockwise->Set(-.5);
+	if(btnBoard->getSADDown()) {
+		if(subsystemInput->potentiometer->Get() > SAD_DOWN_POT) {
+			subsystemBallShooter->spinnerCounterclockwise->Set(0);
+			subsystemBallShooter->spinnerClockwise->Set(0);
+			subsystemBallShooter->shooterAimingDevice->Set(1);
+		}
+		else if(subsystemInput->potentiometer->Get() < SAD_DOWN_POT) {
+			subsystemBallShooter->spinnerCounterclockwise->Set(0);
+			subsystemBallShooter->spinnerClockwise->Set(0);
+			subsystemBallShooter->shooterAimingDevice->Set(-1);
+		}
+		else {
+			subsystemBallShooter->spinnerClockwise->Set(1);
+			subsystemBallShooter->spinnerCounterclockwise->Set(1);
+		}
 	}
 
 	if(btnBoard->getShoot()) {
 		subsystemBallShooter->spinnerCounterclockwise->Set(.5);
 		subsystemBallShooter->spinnerClockwise->Set(.5);
 		Wait(500);
-		subsystemBallShooter->spinnerSpringWinder->Set(1);
+		subsystemBallShooter->spinnerSpringWinder->Set(Relay::Value::kForward);
 		Wait(1000);
-		subsystemBallShooter->spinnerSpringWinder->Set(0);
+		subsystemBallShooter->spinnerSpringWinder->Set(Relay::Value::kOff);
 		subsystemBallShooter->spinnerCounterclockwise->Set(0);
 		subsystemBallShooter->spinnerClockwise->Set(0);
 	}
@@ -143,7 +160,6 @@ void Robot::TeleopPeriodic() {
 		}
 	}
 	if(btnBoard->getLifterPos() != LIFTER_POS_NONE) {
-		// TODO: Find values for encoder and replace 0s
 		float newValue = RobotMap::potentiometer->Get();
 		switch(btnBoard->getLifterPos()) {
 			case LIFTER_POS_RELEASE:
@@ -162,11 +178,23 @@ void Robot::TeleopPeriodic() {
 			power = -1;
 		else if(power > 0)
 			power = 1;
+
 		else
 			power = 0;
-		RobotMap::lifter->Set(power);
-		//TODO: ENCODER COUNTER
-		RobotMap::lifter->Set(0);
+		RobotMap::lifter->Set(Relay::Value::kForward);
+
+		time_t initTime , currentTime;
+		time(&initTime);
+
+		double distanceTravelled = 0 , velocity = 0 , seconds;
+		while(distanceTravelled < 1.75) { // 1.75 m
+			seconds = difftime(initTime , time(&currentTime));
+			time(&initTime);
+			double acceleration = subsystemInput->accelerometer->GetAcceleration() * GRAVITY;
+			velocity += acceleration * seconds; // v = v0 + a * t
+			distanceTravelled += velocity * seconds + acceleration * seconds * seconds; // d = d0 + v0*t + a*t^2
+		}
+		RobotMap::lifter->Set(Relay::Value::kOff);
 	}
 //	DriverStation::ReportError("Y: "  + std::to_string(y) + "   Twist: " + std::to_string(twist) + "\n"); //OLD: Used for making sure the wheels are set correctly
 //	DriverStation::ReportError("Potentiometer: " + std::to_string(subsystemInput->potentiometer->Get()) + "\n"); //Used to test Potentiometer

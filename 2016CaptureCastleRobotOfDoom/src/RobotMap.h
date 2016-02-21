@@ -13,6 +13,7 @@
 
 #include "WPILib.h"
 #include "AnalogGyro.h"
+#include <Relay.h>
 
 #define FRONT_RIGHT 7
 #define FRONT_LEFT 5
@@ -21,9 +22,9 @@
 
 #define SPINNER_CW 2
 #define SPINNER_CCW 3	// TODO: spinner cw and spinner ccw might be swapped
-#define SPINNER_SPRING_WINDER 1		//TODO: make relay
+#define SPINNER_SPRING_WINDER 1
 
-#define LIFTER 1	//TODO: make relay
+#define LIFTER 1
 #define HOOK_RELEASE 0
 #define POSITION 4
 
@@ -52,13 +53,13 @@ class RobotMap {
 
 		static SpeedController* ballShooterSpinnerClockwise;
 		static SpeedController* ballShooterSpinnerCounterclockwise;
-		static SpeedController* ballShooterSpinnerSpringWinder;
+		static Relay* ballShooterSpinnerSpringWinder;
 
-		static SpeedController* lifter;
+		static Relay* lifter;
 		static SpeedController* position;
 
 		static RobotDrive* robotDrive41;
-		static RobotDrive* shooter;
+		static RobotDrive* shooterAimingDevice; // SAD = Shooter Aiming Device
 
 		static AnalogPotentiometer* potentiometer;
 		static AnalogAccelerometer* accelerometer;

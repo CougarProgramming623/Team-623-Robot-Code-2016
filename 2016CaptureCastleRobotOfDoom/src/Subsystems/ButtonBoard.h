@@ -14,8 +14,8 @@
 #define BUTTON_BOARD_PORT 1
 
 #define PORT_SHOOT 0
-#define PORT_PICKUP_U 0
-#define PORT_PICKUP_D 0
+#define PORT_SAD_U 0 //SAD = Shooter Aiming Device
+#define PORT_SAD_D 0
 #define PORT_POS_OBT 0
 #define PORT_POS_BALL_PKU 0
 #define PORT_POS_DEFAULT 0
@@ -40,8 +40,8 @@
 class ButtonBoard : Joystick {
 	private:
 		JoystickButton *shoot;
-		JoystickButton *pickup_up;
-		JoystickButton *pickup_down;
+		JoystickButton *SAD_up; //SAD = Shooter Aiming Device
+		JoystickButton *SAD_down;
 		JoystickButton *pos_obstacle;
 		JoystickButton *pos_ball_pickup;
 		JoystickButton *pos_default;
@@ -54,8 +54,8 @@ class ButtonBoard : Joystick {
 		ButtonBoard();
 		~ButtonBoard();
 		bool getShoot();
-		bool getPickupUp();
-		bool getPickupDown();
+		bool getSADUp();
+		bool getSADDown();
 		int getPos();
 		int getLifterPos();
 };
