@@ -5,6 +5,7 @@
  *      Author: CougarRobotics
  */
 #include "ButtonBoard.h"
+#include "Buttons/JoystickButton.h"
 
 ButtonBoard::ButtonBoard()
 		: Joystick(BUTTON_BOARD_PORT) {
@@ -22,31 +23,31 @@ ButtonBoard::ButtonBoard()
 }
 
 bool ButtonBoard::getShoot() {
-	return shoot.Get();
+	return shoot->Get();
 }
 
 bool ButtonBoard::getPickupUp() {
-	return pickup_up.Get();
+	return pickup_up->Get();
 }
 
 bool ButtonBoard::getPickupDown() {
-	return pickup_down.Get();
+	return pickup_down->Get();
 }
 
 int ButtonBoard::getPos() {
-	if(pos_saftey.Get()) {
+	if(pos_saftey->Get()) {
 		return POS_NONE;
 	}
-	else if(pos_default.Get()) {
+	else if(pos_default->Get()) {
 		return POS_DEFAULT;
 	}
-	else if(pos_obstacle.Get()) {
+	else if(pos_obstacle->Get()) {
 		return POS_OBSTACLE;
 	}
-	else if(pos_ball_pickup.Get()) {
+	else if(pos_ball_pickup->Get()) {
 		return POS_BALL_PICKUP;
 	}
-	else if(pos_shooting.Get()) {
+	else if(pos_shooting->Get()) {
 		return POS_SHOOTING;
 	}
 	else {
@@ -56,13 +57,13 @@ int ButtonBoard::getPos() {
 }
 
 int ButtonBoard::getLifterPos() {
-	if(robot_lifter_release.Get()) {
+	if(robot_lifter_release->Get()) {
 		return LIFTER_POS_RELEASE;
 	}
-	else if(robot_lifter_up.Get()) {
+	else if(robot_lifter_up->Get()) {
 		return LIFTER_POS_UP;
 	}
-	else if(robot_lifter_down.Get()) {
+	else if(robot_lifter_down->Get()) {
 		return LIFTER_POS_DOWN;
 	}
 	else {

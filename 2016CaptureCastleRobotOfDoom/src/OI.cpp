@@ -41,7 +41,7 @@ Joystick* OI::getJoystick1() {
 	return joystick1;
 }
 
-Joystick* OI::getBtnBoard() {
+ButtonBoard* OI::getBtnBoard() {
 	return btnBoard;
 }
 
