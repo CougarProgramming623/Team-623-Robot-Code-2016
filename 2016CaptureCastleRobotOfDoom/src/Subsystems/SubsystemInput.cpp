@@ -10,7 +10,7 @@
 SubsystemInput::SubsystemInput() :
 		Subsystem("Subsystem Input") {
 
-	potentiometer = RobotMap::robotMap->potentiometer;
+	potentiometer = RobotMap::potentiometer;
 }
 
 void SubsystemInput::InitDefaultCommand() {

@@ -8,9 +8,6 @@
 #ifndef SRC_SUBSYSTEMS_BUTTONBOARD_H_
 #define SRC_SUBSYSTEMS_BUTTONBOARD_H_
 
-#include "Buttons/JoystickButton.h"
-#include <Joystick.h>
-
 #define BUTTON_BOARD_PORT 1
 
 #define PORT_SHOOT 0
@@ -39,17 +36,17 @@
 
 class ButtonBoard : Joystick {
 	private:
-		JoystickButton *shoot;
-		JoystickButton *pickup_up;
-		JoystickButton *pickup_down;
-		JoystickButton *pos_obstacle;
-		JoystickButton *pos_ball_pickup;
-		JoystickButton *pos_default;
-		JoystickButton *pos_shooting;
-		JoystickButton *pos_saftey;
-		JoystickButton *robot_lifter_release;
-		JoystickButton *robot_lifter_up;
-		JoystickButton *robot_lifter_down;
+		JoystickButton shoot;
+		JoystickButton pickup_up;
+		JoystickButton pickup_down;
+		JoystickButton pos_obstacle;
+		JoystickButton pos_ball_pickup;
+		JoystickButton pos_default;
+		JoystickButton pos_shooting;
+		JoystickButton pos_saftey;
+		JoystickButton robot_lifter_release;
+		JoystickButton robot_lifter_up;
+		JoystickButton robot_lifter_down;
 	public:
 		ButtonBoard();
 		~ButtonBoard();
