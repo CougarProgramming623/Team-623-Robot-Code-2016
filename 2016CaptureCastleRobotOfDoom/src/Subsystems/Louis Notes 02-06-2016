@@ -34,10 +34,13 @@ Buttons (2/10 Total Buttons: 11)
 			Up and down (push and hold) [B] [B]
 					
 Autonomous Notes: (Updated: 2/20/16)
-	1. Distance to secret passage ~72.299 inches
-	2. Distance through low bar and to about shooting position ~288.351 inches (+ 12 points)
-	3. Turn ~120.39 degrees
-	4. Shoot Ball (+ 10 points)
+	1. Turn Left to face the secret passage 
+	2. Move forward ~72.299 inches into secret passage
+	3. Turn right to face the low bar
+	4. Move forward ~288.351 inches through low bar and to about shooting position (+ 12 points)
+	5. Turn ~120.39 degrees
+	
+	6. Shoot Ball (+ 10 points)
 	
 
 Accelerometer

@@ -16,11 +16,11 @@ ButtonBoard::ButtonBoard()
 	pos_obstacle = new JoystickButton(this , PORT_POS_OBT);
 	pos_ball_pickup = new JoystickButton(this , PORT_POS_BALL_PKU);
 	pos_default = new JoystickButton(this , PORT_POS_DEFAULT);
-	pos_shooting = new JoystickButton(this , PORT_POS_SHT);
+	pos_shooting = new JoystickButton(this , PORT_POS_SHOOT);
 	pos_saftey = new JoystickButton(this , PORT_POS_SFTY);
-	robot_lifter_release = new JoystickButton(this , PORT_RL_R);
-	robot_lifter_up = new JoystickButton(this , PORT_RL_U);
-	robot_lifter_down = new JoystickButton(this , PORT_RL_D);
+	robot_lifter_release = new JoystickButton(this , PORT_ROBOT_LIFTER_RELEASE);
+	robot_lifter_up = new JoystickButton(this , PORT_ROBOT_LIFTER_U);
+	robot_lifter_down = new JoystickButton(this , PORT_ROBOT_LIFTER_D);
 }
 
 ButtonBoard::~ButtonBoard() {

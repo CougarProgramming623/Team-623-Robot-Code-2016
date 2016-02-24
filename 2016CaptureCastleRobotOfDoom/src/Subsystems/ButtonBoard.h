@@ -19,11 +19,11 @@
 #define PORT_POS_OBT 0
 #define PORT_POS_BALL_PKU 0
 #define PORT_POS_DEFAULT 0
-#define PORT_POS_SHT 0
+#define PORT_POS_SHOOT 0
 #define PORT_POS_SFTY 0
-#define PORT_RL_R 0
-#define PORT_RL_U 0
-#define PORT_RL_D 0
+#define PORT_ROBOT_LIFTER_RELEASE 0
+#define PORT_ROBOT_LIFTER_U 0
+#define PORT_ROBOT_LIFTER_D 0
 
 #define POS_NONE 0
 #define POS_OBSTACLE 1
