@@ -38,8 +38,9 @@ AnalogTrigger* RobotMap::heightCounter = NULL;
 
 RobotMap::RobotMap()
 		: gyro(GYRO) {
-	gyro->InitGyro();
-	gyro->Calibrate();
+	// TODO: Fix this crash.
+	//gyro->InitGyro();
+	//gyro->Calibrate();
 }
 
 void RobotMap::init() {
@@ -93,13 +94,14 @@ void RobotMap::init() {
 	ballShooterSpinnerSpringWinder = new Relay(SPINNER_SPRING_WINDER);
 	lw->AddActuator("Ball Shooter" , "spinner spring winder" , (Relay*) ballShooterSpinnerSpringWinder);
 
-	shooting = new RobotDrive(ballShooterSpinnerClockwise , ballShooterSpinnerCounterclockwise , NULL , NULL);
+	shooting = new RobotDrive(ballShooterSpinnerClockwise , ballShooterSpinnerCounterclockwise);
 
 	shooting->SetSafetyEnabled(true);
 	shooting->SetExpiration(0.1);
 	shooting->SetSensitivity(0.5);
 	shooting->SetMaxOutput(0.5);
-	shooting->SetInvertedMotor(RobotDrive::kRearLeftMotor , true);
+	// TODO: Fix this crash.
+	//shooting->SetInvertedMotor(RobotDrive::kBackLeftMotor , true);
 
 	lifter = new Relay(LIFTER);
 	lw->AddActuator("MCL" , "lifter" , (Relay*) lifter);
