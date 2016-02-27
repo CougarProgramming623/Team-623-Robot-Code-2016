@@ -15,10 +15,6 @@
 #include "AnalogGyro.h"
 #include <Relay.h>
 
-#ifndef NULL
-#define NULL   ((void *) 0)
-#endif
-
 #define FRONT_RIGHT 7
 #define FRONT_LEFT 5
 #define BACK_RIGHT 6
@@ -28,25 +24,25 @@
 #define SPINNER_CCW 3	// TODO: spinner cw and spinner ccw might be swapped
 #define SPINNER_SPRING_WINDER 1
 
-#define SCALE_TOWER 0 //TODO: GET PORT
-#define ARMS_UP_AND_OUT 1
-#define HOOK_RELEASE 0 //TODO: GET PORT
+#define PORT_SAD 4
+#define SCALE_TOWER 1 //TODO: GET PORT
+#define ARMS_UP_AND_OUT 0
 #define POSITION 4
 
 //TODO: Get the ports of all the defines below
 //Sensors
 #define PORT_POTENTIOMETER 1
-#define PORT_ACCELEROMETER 2
 #define PORT_ULTRASONIC_PING 6
 #define PORT_ULTRASONIC_ECHO 7
 #define PORT_GYRO 0
 
 //Limit Switches
-#define L_SPINNER_SPRING_WINDER 0
-#define L_SAD_POS_BASELINE 0
+#define L_SPINNER_SPRING_WINDER 2
+#define L_SAD_POS_UPPERBOUND 4 //TODO: Need to implement
+#define L_SAD_POS_BASELINE 3
 
 //Height Counter (pulses)
-#define HEIGHT_COUNTER 0
+#define HEIGHT_COUNTER 5
 
 /**
  *The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -68,14 +64,14 @@ class RobotMap {
 		static SpeedController *ballShooterSpinnerClockwise;
 		static SpeedController *ballShooterSpinnerCounterclockwise;
 		static SpeedController *shooterAimingDevice; // SAD = Shooter Aiming Device
+
 		static Relay *ballShooterSpinnerSpringWinder;
+		static Relay *armsUpAndOut;
 
 		static SpeedController *scaleTower;
-		static Relay *armsUpAndOut;
 		static SpeedController *position;
 
 		static RobotDrive *robotDrive41;
-//		static RobotDrive *shooting;
 
 		static AnalogPotentiometer *potentiometer;
 		static BuiltInAccelerometer *accelerometer;

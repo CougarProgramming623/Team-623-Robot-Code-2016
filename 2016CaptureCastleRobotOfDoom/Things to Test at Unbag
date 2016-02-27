@@ -1,5 +1,14 @@
-0. Potentiometer for all positions
+0. Potentiometer for all positions (Done)
 1. Get all port numbers
 2. CW CCW motors (if reversed)
 3. Test to get Threshold of MAX_SHOOT_DISTANCE in Robot.h
 4. Get number of revolutions to lift robot
+
+
+
+Potentiometer measurements
+90 degrees - 0.43
+45 degrees - 0.25
+0 degrees - 0.07
+All in (Max) - 0.52
+All down (Min) - 0.05

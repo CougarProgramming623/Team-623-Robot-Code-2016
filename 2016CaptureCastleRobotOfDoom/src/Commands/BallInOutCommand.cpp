@@ -31,7 +31,7 @@ BallInOutCommand::End() {
 		Robot::subsystemBallShooter->spinnerSpringWinder->Set(Relay::Value::kReverse);
 		while(!RobotMap::limitSpinnerSpringWinder->Get())
 			;
-		Wait(500);
+		Wait(.5);
 		Robot::subsystemBallShooter->spinnerSpringWinder->Set(Relay::Value::kOff);
 	}
 }
@@ -44,10 +44,10 @@ BallInOutCommand::Interrupted() {
 void
 BallInOutCommand::Execute() {
 	if(isIn) {
-		robot->shoot(.5);
+		Robot::robot->shoot(.5);
 	}
 	else {
-		robot->shoot(.25);
+		Robot::robot->shoot(.25);
 	}
 }
 

@@ -8,6 +8,8 @@
 #ifndef SRC_COMMANDS_BALLINOUTCOMMAND_H_
 #define SRC_COMMANDS_BALLINOUTCOMMAND_H_
 
+#include "../Robot.h"
+
 class BallInOutCommand : public Command {
 	private:
 		bool isFinished , isIn;

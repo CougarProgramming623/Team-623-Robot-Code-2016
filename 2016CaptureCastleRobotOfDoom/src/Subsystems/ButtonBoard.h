@@ -11,7 +11,7 @@
 #include "Buttons/JoystickButton.h"
 #include "Joystick.h"
 
-#define BUTTON_BOARD_PORT 1
+#define BUTTON_BOARD_PORT 2
 
 #define PORT_ARMS_UP_AND_OUT 11
 #define PORT_SHOOT 4

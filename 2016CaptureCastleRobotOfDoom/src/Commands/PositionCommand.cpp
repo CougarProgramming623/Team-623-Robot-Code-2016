@@ -7,7 +7,7 @@
 
 #include "PositionCommand.h"
 
-PositionCommand::PositionCommand(Robot *robot, int btnNumber) {
+PositionCommand::PositionCommand(Robot *robot , int btnNumber) {
 	isFinished = false;
 	this->robot = robot;
 	this->btnNumber = btnNumber;
@@ -36,21 +36,21 @@ PositionCommand::Interrupted() {
 void
 PositionCommand::Execute() {
 	double position = 0; //TODO: Do position stuff
-	switch(btnNumber){
-	case COMMAND_SAFETY:
-		break;
-	case COMMAND_STORE:
-		break;
-	case COMMAND_AUTO_AIM:
-		break;
-	case COMMAND_PICK_UP:
-		break;
-	case COMMAND_PORTCULIS_UP:
-		break;
-	case COMMAND_PORTCULIS_DOWN:
-		break;
+	switch (btnNumber) {
+		case COMMAND_SAFETY:
+			break;
+		case COMMAND_STORE:
+			break;
+		case COMMAND_AUTO_AIM:
+			break;
+		case COMMAND_PICK_UP:
+			break;
+		case COMMAND_PORTCULIS_UP:
+			break;
+		case COMMAND_PORTCULIS_DOWN:
+			break;
 	}
-	double currentPosition =  RobotMap::potentiometer->Get();
+	double currentPosition = RobotMap::potentiometer->Get();
 	double speed = position - currentPosition;
 	if(speed > 1)
 		speed = 1;
@@ -59,8 +59,8 @@ PositionCommand::Execute() {
 	if(speed < 1)
 		speed = -1;
 	else if(speed < 0 && speed > -MIN_THRESHOLD)
-			speed = -MIN_THRESHOLD;
-	Robot::subsystemBallShooter->shooterAimingDevice->Set(speed); //Comment
+		speed = -MIN_THRESHOLD;
+	Robot::subsystemBallShooter->shooterAimingDevice->Set(.3 * speed); //Comment
 	while(fabs(position - RobotMap::potentiometer->Get() > .05))
 		;
 	Robot::subsystemBallShooter->shooterAimingDevice->Set(0);

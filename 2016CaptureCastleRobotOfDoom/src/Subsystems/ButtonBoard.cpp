@@ -7,9 +7,9 @@
 #include "Joystick.h"
 #include "Buttons/JoystickButton.h"
 #include "ButtonBoard.h"
-#include "../Commands/ShootCommand.h";
-#include "../Commands/PositionCommand.h";
-#include "../Commands/BallInOutCommand.h";
+#include "../Commands/ShootCommand.h"
+#include "../Commands/PositionCommand.h"
+#include "../Commands/BallInOutCommand.h"
 
 ButtonBoard::ButtonBoard() :
 	Joystick(BUTTON_BOARD_PORT) {

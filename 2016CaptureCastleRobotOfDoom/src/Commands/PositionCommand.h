@@ -5,10 +5,9 @@
  *      Author: CougarRobotics
  */
 
-#ifndef SRC_COMMANDS_SHOOTCOMMAND_H_
-#define SRC_COMMANDS_SHOOTCOMMAND_H_
+#ifndef SRC_COMMANDS_POSITIONCOMMAND_H_
+#define SRC_COMMANDS_POSITIONCOMMAND_H_
 
-#include "Commands/Subsystem.h"
 #include "../Robot.h"
 
 #define COMMAND_SAFETY 0
