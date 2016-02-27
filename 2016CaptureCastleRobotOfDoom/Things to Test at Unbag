@@ -1,0 +1,5 @@
+0. Potentiometer for all positions
+1. Get all port numbers
+2. CW CCW motors (if reversed)
+3. Test to get Threshold of MAX_SHOOT_DISTANCE in Robot.h
+4. Get number of revolutions to lift robot

@@ -27,23 +27,23 @@
 #define PORT_SAD_UP 13 //SAD = Shooter Aiming Device
 #define PORT_SAD_DOWN 12
 
-#define SAD_UP 1
-#define SAD_DOWN -1
-#define SAD_NONE 0
-
-#define BALL_IN 1
-#define BALL_OUT -1
-#define BALL_NONE 0
-
-#define PORTCULIS_UP 1
-#define PORTCULIS_DOWN -1
-#define PORTCULIS_NONE 0
-
 #define POS_NONE 0
 #define POS_SAFTEY 1
 #define POS_STORE 2
 #define POS_AUTO_AIM 3
 #define POS_PICK_UP 4
+
+#define SAD_UP 5
+#define SAD_DOWN -5
+#define SAD_NONE 0
+
+#define BALL_IN 6
+#define BALL_OUT -6
+#define BALL_NONE 0
+
+#define PORTCULIS_UP 7
+#define PORTCULIS_DOWN -7
+#define PORTCULIS_NONE 0
 
 class ButtonBoard : public Joystick {
 	private:

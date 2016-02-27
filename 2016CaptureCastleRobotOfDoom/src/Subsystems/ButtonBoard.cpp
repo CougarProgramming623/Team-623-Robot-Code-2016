@@ -7,6 +7,9 @@
 #include "Joystick.h"
 #include "Buttons/JoystickButton.h"
 #include "ButtonBoard.h"
+#include "../Commands/ShootCommand.h";
+#include "../Commands/PositionCommand.h";
+#include "../Commands/BallInOutCommand.h";
 
 ButtonBoard::ButtonBoard() :
 	Joystick(BUTTON_BOARD_PORT) {
@@ -23,6 +26,18 @@ ButtonBoard::ButtonBoard() :
 	pos_pickup = new JoystickButton(this , PORT_POS_PICK_UP);
 	port_up = new JoystickButton(this , PORT_PORTCULIS_UP);
 	port_down = new JoystickButton(this , PORT_PORTCULIS_DOWN);
+
+	shoot->WhileHeld(new ShootCommand(Robot::robot));
+
+	pos_saftey->WhileHeld(new PositionCommand(Robot::robot , COMMAND_SAFETY));
+	pos_auto_aim->WhileHeld(new PositionCommand(Robot::robot , COMMAND_AUTO_AIM));
+	pos_pickup->WhileHeld(new PositionCommand(Robot::robot , COMMAND_PICK_UP));
+	port_down->WhileHeld(new PositionCommand(Robot::robot , COMMAND_PORTCULIS_DOWN));
+	port_up->WhileHeld(new PositionCommand(Robot::robot , COMMAND_PORTCULIS_UP));
+	pos_store->WhileHeld(new PositionCommand(Robot::robot , COMMAND_STORE));
+
+	ball_in->WhileHeld(new BallInOutCommand(Robot::robot , true));
+	ball_out->WhileHeld(new BallInOutCommand(Robot::robot , false));
 }
 
 ButtonBoard::~ButtonBoard() {
