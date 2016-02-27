@@ -70,7 +70,7 @@ void ImageProcessor::process() {
 		for(int j = 1; j < HEIGHT - 1; j++) {
 			double weight = .8;
 			int avg = (int) (weight * getAverage(ORIGINAL , i , j) + (1 - weight) * getAverage(MASKED , i , j));
-			if(avg > 8)																//TODO: Check 8
+			if(avg > 8)
 				points->push_back(new Point(i , j));
 		}
 	}

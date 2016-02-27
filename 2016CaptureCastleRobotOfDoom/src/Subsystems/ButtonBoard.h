@@ -13,51 +13,71 @@
 
 #define BUTTON_BOARD_PORT 1
 
-#define PORT_SHOOT 0
-#define PORT_SAD_U 0 //SAD = Shooter Aiming Device
-#define PORT_SAD_D 0
-#define PORT_POS_OBT 0
-#define PORT_POS_BALL_PKU 0
-#define PORT_POS_DEFAULT 0
-#define PORT_POS_SHOOT 0
-#define PORT_POS_SFTY 0
-#define PORT_ROBOT_LIFTER_RELEASE 0
-#define PORT_ROBOT_LIFTER_U 0
-#define PORT_ROBOT_LIFTER_D 0
+#define PORT_ARMS_UP_AND_OUT 11
+#define PORT_SHOOT 4
+#define PORT_BALL_IN 3
+#define PORT_BALL_OUT 2
+#define PORT_SCALE_TOWER 2
+#define PORT_POS_SAFTEY 5
+#define PORT_POS_STORE 6
+#define PORT_POS_AUTO_AIM 7
+#define PORT_POS_PICK_UP 8
+#define PORT_PORTCULIS_UP 9
+#define PORT_PORTCULIS_DOWN 10
+#define PORT_SAD_UP 13 //SAD = Shooter Aiming Device
+#define PORT_SAD_DOWN 12
+
+#define SAD_UP 1
+#define SAD_DOWN -1
+#define SAD_NONE 0
+
+#define BALL_IN 1
+#define BALL_OUT -1
+#define BALL_NONE 0
+
+#define PORTCULIS_UP 1
+#define PORTCULIS_DOWN -1
+#define PORTCULIS_NONE 0
 
 #define POS_NONE 0
-#define POS_OBSTACLE 1
-#define POS_BALL_PICKUP 2
-#define POS_DEFAULT 3
-#define POS_SHOOTING 4
-#define POS_SAFTEY 5
+#define POS_SAFTEY 1
+#define POS_STORE 2
+#define POS_AUTO_AIM 3
+#define POS_PICK_UP 4
 
-#define LIFTER_POS_NONE 0
-#define LIFTER_POS_RELEASE 1
-#define LIFTER_POS_UP 2
-#define LIFTER_POS_DOWN 3
-
-class ButtonBoard : Joystick {
+class ButtonBoard : public Joystick {
 	private:
-		JoystickButton *shoot;
 		JoystickButton *SAD_up; //SAD = Shooter Aiming Device
 		JoystickButton *SAD_down;
-		JoystickButton *pos_obstacle;
-		JoystickButton *pos_ball_pickup;
-		JoystickButton *pos_default;
-		JoystickButton *pos_shooting;
+		JoystickButton *arms_up_and_out;
+		JoystickButton *shoot;
+		JoystickButton *ball_in;
+		JoystickButton *ball_out;
+		JoystickButton *scale_tower;
 		JoystickButton *pos_saftey;
-		JoystickButton *robot_lifter_release;
-		JoystickButton *robot_lifter_up;
-		JoystickButton *robot_lifter_down;
+		JoystickButton *pos_store;
+		JoystickButton *pos_auto_aim;
+		JoystickButton *pos_pickup;
+		JoystickButton *port_up;
+		JoystickButton *port_down;
 	public:
 		ButtonBoard();
 		~ButtonBoard();
-		bool getShoot();
-		bool getSADUp();
-		bool getSADDown();
-		int getPos();
-		int getLifterPos();
+
+		int
+		getSADPos();
+		int
+		getPresetPos();
+		int
+		getPortPos();
+		int
+		getBallSpinner();
+		bool
+		getScaleTower();
+		bool
+		getArmsUpAndOut();
+		bool
+		getShoot();
 };
 
 #endif /* SRC_SUBSYSTEMS_BUTTONBOARD_H_ */

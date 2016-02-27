@@ -13,7 +13,7 @@
 class SubsystemInput : public Subsystem {
 	public:
 		AnalogPotentiometer* potentiometer;
-		AnalogAccelerometer* accelerometer;
+		BuiltInAccelerometer* accelerometer;
 		AnalogGyro* gyro;
 		SubsystemInput();
 		void InitDefaultCommand();
