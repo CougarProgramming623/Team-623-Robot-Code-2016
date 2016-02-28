@@ -14,6 +14,7 @@
 #include "WPILib.h"
 #include "AnalogGyro.h"
 #include <Relay.h>
+#include "Robot.h"
 
 #define FRONT_RIGHT 7
 #define FRONT_LEFT 5
@@ -21,15 +22,14 @@
 #define BACK_LEFT 8
 
 #define SPINNER_CW 2
-#define SPINNER_CCW 3	// TODO: spinner cw and spinner ccw might be swapped
+#define SPINNER_CCW 3
 #define SPINNER_SPRING_WINDER 1
 
 #define PORT_SAD 4
-#define SCALE_TOWER 1 //TODO: GET PORT
+#define SCALE_TOWER 1
 #define ARMS_UP_AND_OUT 0
 #define POSITION 4
 
-//TODO: Get the ports of all the defines below
 //Sensors
 #define PORT_POTENTIOMETER 1
 #define PORT_ULTRASONIC_PING 6
@@ -38,7 +38,7 @@
 
 //Limit Switches
 #define L_SPINNER_SPRING_WINDER 2
-#define L_SAD_POS_UPPERBOUND 4 //TODO: Need to implement
+#define L_SAD_POS_UPPERBOUND 4
 #define L_SAD_POS_BASELINE 3
 
 //Height Counter (pulses)
@@ -86,5 +86,7 @@ class RobotMap {
 
 		static void
 		init();
+		static double degreeToPotentiometer(double);
+		static double potentiometerToDegree(double);
 };
 #endif

@@ -12,7 +12,7 @@
 
 class ShootCommand : public Command {
 	private:
-		bool isFinished;
+		bool isFinished , isBallShot;
 		Robot *robot;
 	public:
 		ShootCommand(Robot*);

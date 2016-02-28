@@ -11,8 +11,6 @@
 #include "Buttons/JoystickButton.h"
 #include "Joystick.h"
 
-#define BUTTON_BOARD_PORT 2
-
 #define PORT_ARMS_UP_AND_OUT 11
 #define PORT_SHOOT 4
 #define PORT_BALL_IN 3
@@ -61,7 +59,7 @@ class ButtonBoard : public Joystick {
 		JoystickButton *port_up;
 		JoystickButton *port_down;
 	public:
-		ButtonBoard();
+		ButtonBoard(int port);
 		~ButtonBoard();
 
 		int

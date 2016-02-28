@@ -21,9 +21,11 @@
 
 class PositionCommand : public Command {
 	private:
+		double secondsSinceLastPressed;
 		bool isFinished;
 		int btnNumber;
 		Robot *robot;
+		time_t lastTime , currentTime;
 	public:
 		PositionCommand(Robot*, int);
 		virtual void

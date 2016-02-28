@@ -10,6 +10,7 @@
 ShootCommand::ShootCommand(Robot *robot) {
 	isFinished = false;
 	this->robot = robot;
+	isBallShot = false;
 }
 
 void
@@ -32,6 +33,20 @@ ShootCommand::Interrupted() {
 
 void
 ShootCommand::Execute() {
-	robot->shoot();
+	if(!isBallShot && !RobotMap::ballShooterSpinnerSpringWinder->Get()) {
+		//Stop Spinners and Kicker
+		RobotMap::ballShooterSpinnerClockwise->Set(0);
+		RobotMap::ballShooterSpinnerCounterclockwise->Set(0);
+		RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kOff);
+	}
+	else if(isBallShot) {
+		RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kReverse);
+	}
+	else {
+		//Aim
+		RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kForward);
+		RobotMap::ballShooterSpinnerClockwise->Set(.5);
+		RobotMap::ballShooterSpinnerCounterclockwise->Set(.5);
+	}
 }
 

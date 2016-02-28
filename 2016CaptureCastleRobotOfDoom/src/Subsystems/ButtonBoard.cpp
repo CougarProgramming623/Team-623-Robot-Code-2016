@@ -10,9 +10,10 @@
 #include "../Commands/ShootCommand.h"
 #include "../Commands/PositionCommand.h"
 #include "../Commands/BallInOutCommand.h"
+#include "../Commands/ArmsUpAndOutCommand.h"
 
-ButtonBoard::ButtonBoard() :
-	Joystick(BUTTON_BOARD_PORT) {
+ButtonBoard::ButtonBoard(int port) :
+	Joystick(port) {
 	arms_up_and_out = new JoystickButton(this , PORT_ARMS_UP_AND_OUT);
 	shoot = new JoystickButton(this , PORT_SHOOT);
 	SAD_up = new JoystickButton(this , PORT_SAD_UP);
@@ -27,7 +28,7 @@ ButtonBoard::ButtonBoard() :
 	port_up = new JoystickButton(this , PORT_PORTCULIS_UP);
 	port_down = new JoystickButton(this , PORT_PORTCULIS_DOWN);
 
-	shoot->WhileHeld(new ShootCommand(Robot::robot));
+	shoot->WhenPressed(new ShootCommand(Robot::robot));
 
 	pos_saftey->WhileHeld(new PositionCommand(Robot::robot , COMMAND_SAFETY));
 	pos_auto_aim->WhileHeld(new PositionCommand(Robot::robot , COMMAND_AUTO_AIM));
@@ -36,8 +37,10 @@ ButtonBoard::ButtonBoard() :
 	port_up->WhileHeld(new PositionCommand(Robot::robot , COMMAND_PORTCULIS_UP));
 	pos_store->WhileHeld(new PositionCommand(Robot::robot , COMMAND_STORE));
 
-	ball_in->WhileHeld(new BallInOutCommand(Robot::robot , true));
-	ball_out->WhileHeld(new BallInOutCommand(Robot::robot , false));
+	ball_in->WhenPressed(new BallInOutCommand(Robot::robot , true));
+	ball_out->WhenPressed(new BallInOutCommand(Robot::robot , false));
+
+	arms_up_and_out->WhenPressed(new ArmsUpAndOutCommand());
 }
 
 ButtonBoard::~ButtonBoard() {

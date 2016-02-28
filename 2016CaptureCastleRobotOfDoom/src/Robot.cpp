@@ -118,7 +118,7 @@ Robot::moveRobotLinear(double power , double distance) { // in meters
 	time(&initTime);
 	double distanceTravelled = 0 , velocity = 0 , seconds;
 	while(distanceTravelled < distance) {
-		seconds = difftime(initTime , time(&currentTime));
+		seconds = difftime(time(&currentTime) , initTime);
 		time(&initTime);
 		double acceleration = getAcceleration() * GRAVITY;
 		velocity += acceleration * seconds; // v = v0 + a * t
@@ -191,53 +191,33 @@ Robot::TeleopInit() {
 
 void
 Robot::TeleopPeriodic() {
-	const double linear_threshold = .05; //NOTE:Change if rotate speed too slow or too fast
-	const double twist_threshold = .05; //NOTE: Change if rotate speed too slow or too fast
 	Scheduler::GetInstance()->Run();
 
-//  Teleop Movement
-	Joystick* joystick = oi->getJoystick1();
-	double y = joystick->GetY() , twist = joystick->GetTwist();
-	bool moved = false;
-	if(fabs(y) > linear_threshold) {
-		subsystemDrive->treadRightFront->Set(y);
-		subsystemDrive->treadRightBack->Set(y);
-		subsystemDrive->treadLeftFront->Set(y);
-		subsystemDrive->treadLeftBack->Set(y);
-		moved = true;
-	}
-	if(fabs(twist) > twist_threshold) { //Left side of Robot already inverted (inverted in RobotBuilder)
-		subsystemDrive->treadRightFront->Set(twist);
-		subsystemDrive->treadRightBack->Set(twist);
-		subsystemDrive->treadLeftFront->Set(-twist);
-		subsystemDrive->treadLeftBack->Set(-twist);
-		moved = true;
-	}
-	if(!moved)
-		stopRobot();
 //The Button of the All Mighty Board of Buttons
 	ButtonBoard* btnBoard = oi->getBtnBoard();
 
-	if(btnBoard->getArmsUpAndOut()) {
+	if(btnBoard->getScaleTower()) {
 		RobotMap::shooterAimingDevice->Get(); // TODO: MOVE till in saftey
-		RobotMap::armsUpAndOut->Set(Relay::Value::kForward);
+
+		RobotMap::scaleTower->Set(1);
 
 		time_t initTime , currentTime;
 		time(&initTime);
 
 		int counter = 0;
-		double distanceTravelled = 0 , velocity = 0 , seconds;
+		double distanceTravelled = 0 , velocity = 0 , dt;
 		while(distanceTravelled < 1.75) { // 1.75 m
-			seconds = difftime(initTime , time(&currentTime));
+			dt = difftime(time(&currentTime) , initTime);
 			time(&initTime);
 			double acceleration = getAcceleration() * GRAVITY;
-			velocity += acceleration * seconds; // v = v0 + a * t
-			distanceTravelled += velocity * seconds + acceleration * seconds * seconds; // d = d0 + v0*t + a*t^2
+			velocity += acceleration * dt; // v = v0 + a * t
+			distanceTravelled += velocity * dt + acceleration * dt * dt; // d = d0 + v0*t + a*t^2
 			counter += RobotMap::heightCounter->GetTriggerState() ? 1 : 0;
 			if(counter >= MAX_REVOLUTIONS)
 				break;
 		}
-		RobotMap::armsUpAndOut->Set(Relay::Value::kOff);
+
+		RobotMap::scaleTower->Set(0);
 	}
 
 	//Arms Up & Out Button
@@ -248,6 +228,7 @@ Robot::TeleopPeriodic() {
 		RobotMap::scaleTower->Set(0);
 	}
 	DriverStation::ReportError("UltraSonic: " + std::to_string(RobotMap::ultrasonic->GetRangeMM()) + "\n"); //Change for debugging
+	DriverStation::ReportError("Potentiometer: " + std::to_string(RobotMap::potentiometer->Get()) + "\n"); //Change for debugging
 }
 
 void

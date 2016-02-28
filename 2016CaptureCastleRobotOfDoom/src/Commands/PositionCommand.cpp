@@ -11,6 +11,9 @@ PositionCommand::PositionCommand(Robot *robot , int btnNumber) {
 	isFinished = false;
 	this->robot = robot;
 	this->btnNumber = btnNumber;
+	time(&lastTime);
+	time(&currentTime);
+	secondsSinceLastPressed = 0;
 }
 
 void
@@ -33,21 +36,53 @@ PositionCommand::Interrupted() {
 	End();
 }
 
+/*
+ Potentiometer measurements
+ 90 degrees - 0.43
+ 45 degrees - 0.25
+ 0 degrees - 0.07
+ All in (Max) - 0.52 (112.5 deg)
+ All down (Min) - 0.05 (-.05 deg)
+ * */
+
 void
 PositionCommand::Execute() {
-	double position = 0; //TODO: Do position stuff
+	/*if(btnNumber != COMMAND_SAFETY) {
+	 time(&currentTime);
+	 double dt = difftime(currentTime , lastTime);
+	 time(&lastTime);
+	 if(dt < .1) {
+	 secondsSinceLastPressed += dt;
+	 }
+	 else {
+	 secondsSinceLastPressed = 0;
+	 }
+	 if(secondsSinceLastPressed < .25) {
+	 return;
+	 }
+	 }*/
+	double position = 0;
 	switch (btnNumber) {
 		case COMMAND_SAFETY:
+			position = RobotMap::degreeToPotentiometer(112.5);
 			break;
 		case COMMAND_STORE:
+			position = RobotMap::degreeToPotentiometer(45);
 			break;
 		case COMMAND_AUTO_AIM:
+			position = RobotMap::degreeToPotentiometer(60); // TODO: Auto Aim Code
 			break;
 		case COMMAND_PICK_UP:
+			position = RobotMap::degreeToPotentiometer(0);
 			break;
 		case COMMAND_PORTCULIS_UP:
+			position = RobotMap::degreeToPotentiometer(70);
 			break;
 		case COMMAND_PORTCULIS_DOWN:
+			position = RobotMap::degreeToPotentiometer(-.05);
+			break;
+		default:
+			position = RobotMap::degreeToPotentiometer(90);
 			break;
 	}
 	double currentPosition = RobotMap::potentiometer->Get();
@@ -60,9 +95,9 @@ PositionCommand::Execute() {
 		speed = -1;
 	else if(speed < 0 && speed > -MIN_THRESHOLD)
 		speed = -MIN_THRESHOLD;
-	Robot::subsystemBallShooter->shooterAimingDevice->Set(.3 * speed); //Comment
-	while(fabs(position - RobotMap::potentiometer->Get() > .05))
-		;
-	Robot::subsystemBallShooter->shooterAimingDevice->Set(0);
+	if(fabs(position - RobotMap::potentiometer->Get() > .005))
+		Robot::subsystemBallShooter->shooterAimingDevice->Set(.3 * speed); //Comment
+	else
+		Robot::subsystemBallShooter->shooterAimingDevice->Set(0);
 }
 
