@@ -44,9 +44,22 @@ ShootCommand::Execute() {
 	}
 	else {
 		//Aim
-		RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kForward);
-		RobotMap::ballShooterSpinnerClockwise->Set(.5);
-		RobotMap::ballShooterSpinnerCounterclockwise->Set(.5);
+		if(ultrasonicReadingsCount < 5) {
+			totalUltrasonicReadings += RobotMap::getUlrasonicFeet();
+			ultrasonicReadingsCount++;
+		}
+		else {
+			double angle = atan(8.437583333333333 * ultrasonicReadingsCount / ultrasonicReadingsCount);
+			double currentPotentionmeter = RobotMap::potentiometer->Get();
+			double finalPotentiometer = currentPotentionmeter + RobotMap::degreeToPotentiometer(angle);//TODO: Check during testing because Shawn probably made a mistake (check the addition and subtraction)
+			RobotMap::shooterAimingDevice->Set(finalPotentiometer);
+
+			RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kForward);
+			RobotMap::ballShooterSpinnerClockwise->Set(.5);
+			RobotMap::ballShooterSpinnerCounterclockwise->Set(.5);
+			totalUltrasonicReadings = 0;
+			ultrasonicReadingsCount = 0;
+		}
 	}
 }
 

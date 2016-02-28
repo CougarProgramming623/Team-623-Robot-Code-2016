@@ -14,6 +14,8 @@ class ShootCommand : public Command {
 	private:
 		bool isFinished , isBallShot;
 		Robot *robot;
+		double totalUltrasonicReadings = 0;
+		int ultrasonicReadingsCount = 0;
 	public:
 		ShootCommand(Robot*);
 		virtual void
