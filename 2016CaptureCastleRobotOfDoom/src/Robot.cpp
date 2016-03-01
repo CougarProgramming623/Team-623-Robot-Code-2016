@@ -47,11 +47,23 @@ Robot::RobotInit() {
 }
 
 void
-Robot::AutoAim(double averageDistanceToTower) {
-	double angle = atan(8.437583333333333 * averageDistanceToTower);
+Robot::AutoAim(double averageDistanceToTowerFt) {
+	AimAngle(atan(8.437583333333333 * averageDistanceToTowerFt));
+}
+
+void
+Robot::AimAngle(double angle) {
 	double currentPotentionmeter = RobotMap::potentiometer->Get();
 	double finalPotentiometer = currentPotentionmeter - RobotMap::degreeToPotentiometer(angle); //TODO: Check during testing because Shawn probably made a mistake (check the addition and subtraction)
 	RobotMap::shooterAimingDevice->Set(finalPotentiometer);
+}
+
+void
+Robot::Aim(double angle) {
+	AimAngle(angle);
+	while(fabs(RobotMap::potentiometerToDegree(RobotMap::potentiometer->Get()) - angle) < 2.500000000003)
+		;
+	RobotMap::shooterAimingDevice->Set(0);
 }
 
 double
@@ -63,7 +75,7 @@ Robot::getPoteniometerValue() {
 void
 Robot::shoot() {
 	double range;
-	while(MAX_SHOOT_DISTANCE > (range = RobotMap::ultrasonic->GetRangeMM() / 1000)) {
+	while(MAX_SHOOT_DISTANCE > (range = RobotMap::getUlrasonicMeters())) {
 		double power = range / MAX_SHOOT_DISTANCE - 1;
 		if(power > 1)
 			power = 1;
@@ -103,8 +115,6 @@ Robot::turnRobot(double power) { //-1 = Left 1 = Right
 void
 Robot::turnRobot(double power , double degrees) {
 	turnRobot(power);
-	if(true)
-		return; //TODO: DELETE THIS LINE FOR TESTING ONLY
 	float gyroRotation = RobotMap::robotMap->gyro->GetAngle();
 	while(fmod(3600 + RobotMap::robotMap->gyro->GetAngle() - gyroRotation - degrees , 360) > 5)
 		;
@@ -172,21 +182,37 @@ Robot::AutonomousInit() {
 	}
 
 	potentiometer_zero = RobotMap::potentiometer->Get();
+	if(RobotMap::autoSelector == -1) {
+		DriverStation::ReportError("No Autonomous Selected *whisper* DON'T FAIL *whisper*\n"); //Change for debugging
+	}
 }
 
 //Autonomous program (Look at notes for autonomous instructions)
 void
-Robot::AutonomousPeriodic() { //Start in center Area	//TODO: Write autonomous code
-#if ROBOT_AUTO == 1
-	turnRobot(-1 , 180);
-	moveRobotLinear(1 , 1.85);
-	turnRobot(1 , 90);
-	moveRobotLinear(1 , 7.3);
-	turnRobot(1 , 120);
-	shoot();
-#elif ROBOT_AUTO == 2	//Start in Spy Box
-	shoot();
-#endif
+Robot::AutonomousPeriodic() { //Start in center Area when closer to low bar	//TODO: Write autonomous code
+	switch (RobotMap::autoSelector) {
+		case 0: // Start at center near low bar
+			Aim(0);
+			turnRobot(-1 , 180);
+			moveRobotLinear(1 , 1.85);
+			turnRobot(1 , 90); //TODO: Re-think strategy because you start closer to oponents side
+			moveRobotLinear(1 , 7.3); //TODO:Make SAD point downward before going through low bar
+			turnRobot(1 , 120);
+			Aim(ANGLE_TO_TARGET_FROM_MSD);
+			shoot();
+			break;
+
+		case 1: //Start in Spy Box
+			moveRobotLinear(1 , 1.5); //Reminder: moveRobotLinear is in meters
+			turnRobot(1 , 8); //TODO: Tell drive team to put robot within 3-5 inches of corner when start in spy box
+			Aim(ANGLE_TO_TARGET_FROM_MSD);
+			shoot();
+			break;
+
+		case 2: //Start in center but not near low bar
+			moveRobotLinear(-1 , 1.1);
+			break;
+	}
 }
 
 void
@@ -208,7 +234,7 @@ Robot::TeleopPeriodic() {
 	ButtonBoard* btnBoard = oi->getBtnBoard();
 
 	if(btnBoard->getScaleTower()) {
-		RobotMap::shooterAimingDevice->Get(); // TODO: MOVE till in saftey
+		RobotMap::shooterAimingDevice->Get(); // TODO: MOVE till in safety
 
 		RobotMap::scaleTower->Set(1);
 
