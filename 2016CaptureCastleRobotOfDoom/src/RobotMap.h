@@ -31,14 +31,10 @@
 #define POSITION 4
 
 //Sensors
+#define PORT_GYRO 0
 #define PORT_POTENTIOMETER 1
 #define PORT_ULTRASONIC_PING 6
 #define PORT_ULTRASONIC_ECHO 7
-#define PORT_GYRO 0
-
-//TODO: Test for Ultrasonic Please delete me. Everyday thousands of lines of useless code are not deleted please pity us and give us the path to c++ code heaven.
-#define TEST_PORT_ULTRASONIC_PING 0
-#define TEST_PORT_ULTRASONIC_ECHO 3
 
 //Limit Switches
 #define L_SPINNER_SPRING_WINDER 2
@@ -79,11 +75,9 @@ class RobotMap {
 
 		static AnalogPotentiometer *potentiometer;
 		static BuiltInAccelerometer *accelerometer;
-		static Ultrasonic *ultrasonic;
 
-		//TODO: TEST DELETE WHEN DONE
-		static DigitalOutput *testUltrasonicPing;
-		static AnalogInput *testUltrasonicEcho;
+		static DigitalOutput *ultrasonicPing;
+		static AnalogInput *ultrasonicEcho;
 
 		static DigitalInput *limitSpinnerSpringWinder;
 		static DigitalInput *limitSADPosBaseline;
@@ -94,9 +88,13 @@ class RobotMap {
 
 		static void
 		init();
-		static double degreeToPotentiometer(double);
-		static double potentiometerToDegree(double);
-		static double getUlrasonicFeet();
-		static double getUlrasonicMeters();
+		static double
+		degreeToPotentiometer(double);
+		static double
+		potentiometerToDegree(double);
+		static double
+		getUlrasonicFeet();
+		static double
+		getUlrasonicMeters();
 };
 #endif

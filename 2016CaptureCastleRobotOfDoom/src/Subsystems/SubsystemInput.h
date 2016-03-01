@@ -15,6 +15,10 @@ class SubsystemInput : public Subsystem {
 		AnalogPotentiometer* potentiometer;
 		BuiltInAccelerometer* accelerometer;
 		AnalogGyro* gyro;
+
+		AnalogInput *ultrasonicEcho;
+		DigitalOutput *ultrasonicPing;
+
 		SubsystemInput();
 		void InitDefaultCommand();
 };

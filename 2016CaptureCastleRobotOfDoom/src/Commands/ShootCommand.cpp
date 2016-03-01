@@ -49,11 +49,7 @@ ShootCommand::Execute() {
 			ultrasonicReadingsCount++;
 		}
 		else {
-			double angle = atan(8.437583333333333 * ultrasonicReadingsCount / ultrasonicReadingsCount);
-			double currentPotentionmeter = RobotMap::potentiometer->Get();
-			double finalPotentiometer = currentPotentionmeter + RobotMap::degreeToPotentiometer(angle);//TODO: Check during testing because Shawn probably made a mistake (check the addition and subtraction)
-			RobotMap::shooterAimingDevice->Set(finalPotentiometer);
-
+			Robot::AutoAim(totalUltrasonicReadings / ultrasonicReadingsCount);
 			RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kForward);
 			RobotMap::ballShooterSpinnerClockwise->Set(.5);
 			RobotMap::ballShooterSpinnerCounterclockwise->Set(.5);

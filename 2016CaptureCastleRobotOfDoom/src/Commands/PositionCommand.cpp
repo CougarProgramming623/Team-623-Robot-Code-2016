@@ -70,7 +70,7 @@ PositionCommand::Execute() {
 			position = RobotMap::degreeToPotentiometer(45);
 			break;
 		case COMMAND_AUTO_AIM:
-			position = RobotMap::degreeToPotentiometer(60); // TODO: Auto Aim Code
+			Robot::AutoAim(RobotMap::getUlrasonicFeet());
 			break;
 		case COMMAND_PICK_UP:
 			position = RobotMap::degreeToPotentiometer(0);

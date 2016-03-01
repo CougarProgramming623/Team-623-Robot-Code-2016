@@ -8,14 +8,17 @@
 #include "../RobotMap.h"
 
 SubsystemInput::SubsystemInput() :
-		Subsystem("Subsystem Input") {
+	Subsystem("Subsystem Input") {
 
 	potentiometer = RobotMap::potentiometer;
 	accelerometer = RobotMap::accelerometer;
+	ultrasonicPing = RobotMap::ultrasonicPing;
+	ultrasonicEcho = RobotMap::ultrasonicEcho;
 	gyro = RobotMap::robotMap->gyro;
 }
 
-void SubsystemInput::InitDefaultCommand() {
+void
+SubsystemInput::InitDefaultCommand() {
 
 }
 
