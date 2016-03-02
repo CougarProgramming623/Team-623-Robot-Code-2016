@@ -14,7 +14,7 @@
 #define PORT_ARMS_UP_AND_OUT 11
 #define PORT_SHOOT 4
 #define PORT_BALL_IN 3
-#define PORT_BALL_OUT 2
+#define PORT_BALL_OUT 1
 #define PORT_SCALE_TOWER 2
 #define PORT_POS_SAFTEY 5
 #define PORT_POS_STORE 6

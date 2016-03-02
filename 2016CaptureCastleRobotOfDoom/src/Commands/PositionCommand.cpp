@@ -85,7 +85,7 @@ PositionCommand::Execute() {
 			position = RobotMap::degreeToPotentiometer(90);
 			break;
 	}
-	double currentPosition = RobotMap::potentiometer->Get();
+	double currentPosition = Robot::getPoteniometerValue();
 	double speed = position - currentPosition;
 	if(speed > 1)
 		speed = 1;
@@ -95,7 +95,7 @@ PositionCommand::Execute() {
 		speed = -1;
 	else if(speed < 0 && speed > -MIN_THRESHOLD)
 		speed = -MIN_THRESHOLD;
-	if(fabs(position - RobotMap::potentiometer->Get() > .005))
+	if(fabs(position - Robot::getPoteniometerValue() > .005))
 		Robot::subsystemBallShooter->shooterAimingDevice->Set(.3 * speed); //Comment
 	else
 		Robot::subsystemBallShooter->shooterAimingDevice->Set(0);
