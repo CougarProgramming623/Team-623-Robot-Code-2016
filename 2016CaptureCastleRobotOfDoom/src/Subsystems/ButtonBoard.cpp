@@ -14,6 +14,7 @@
 
 ButtonBoard::ButtonBoard(int port) :
 	Joystick(port) {
+	//Initialization
 	arms_up_and_out = new JoystickButton(this , PORT_ARMS_UP_AND_OUT);
 	shoot = new JoystickButton(this , PORT_SHOOT);
 	SAD_up = new JoystickButton(this , PORT_SAD_UP);
@@ -28,6 +29,8 @@ ButtonBoard::ButtonBoard(int port) :
 	port_up = new JoystickButton(this , PORT_PORTCULIS_UP);
 	port_down = new JoystickButton(this , PORT_PORTCULIS_DOWN);
 
+	//Commands
+
 	shoot->WhenPressed(new ShootCommand(Robot::robot));
 
 	pos_saftey->WhileHeld(new PositionCommand(Robot::robot , COMMAND_SAFETY));
@@ -36,6 +39,9 @@ ButtonBoard::ButtonBoard(int port) :
 	port_down->WhileHeld(new PositionCommand(Robot::robot , COMMAND_PORTCULIS_DOWN));
 	port_up->WhileHeld(new PositionCommand(Robot::robot , COMMAND_PORTCULIS_UP));
 	pos_store->WhileHeld(new PositionCommand(Robot::robot , COMMAND_STORE));
+
+	SAD_up->WhileHeld(new PositionCommand(Robot::robot , COMMAND_SAD_UP));
+	SAD_down->WhileHeld(new PositionCommand(Robot::robot , COMMAND_SAD_DOWN));
 
 	ball_in->WhenPressed(new BallInOutCommand(Robot::robot , true));
 	ball_out->WhenPressed(new BallInOutCommand(Robot::robot , false));

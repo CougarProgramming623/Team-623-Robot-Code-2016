@@ -8,6 +8,8 @@
 #ifndef SRC_SUBSYSTEMS_BUTTONBOARD_H_
 #define SRC_SUBSYSTEMS_BUTTONBOARD_H_
 
+//TODO: Add a timer for raising shooter aiming device to saftey
+
 #include "Buttons/JoystickButton.h"
 #include "Joystick.h"
 
