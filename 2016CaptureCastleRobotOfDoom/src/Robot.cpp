@@ -117,8 +117,8 @@ Robot::turnRobot(double power) { //-1 = Left 1 = Right
 void
 Robot::turnRobot(double power , double degrees) {
 	turnRobot(power);
-	float gyroRotation = RobotMap::robotMap->gyro->GetAngle();
-	while(fmod(3600 + RobotMap::robotMap->gyro->GetAngle() - gyroRotation - degrees , 360) > 5)
+	float gyroRotation = RobotMap::gyro->GetAngle();
+	while(fmod(3600 + RobotMap::gyro->GetAngle() - gyroRotation - degrees , 360) > 5)
 		;
 	stopRobot();
 }

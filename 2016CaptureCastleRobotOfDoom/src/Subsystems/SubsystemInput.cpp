@@ -14,7 +14,7 @@ SubsystemInput::SubsystemInput() :
 	accelerometer = RobotMap::accelerometer;
 	ultrasonicPing = RobotMap::ultrasonicPing;
 	ultrasonicEcho = RobotMap::ultrasonicEcho;
-	gyro = RobotMap::robotMap->gyro;
+	gyro = RobotMap::gyro;
 }
 
 void
