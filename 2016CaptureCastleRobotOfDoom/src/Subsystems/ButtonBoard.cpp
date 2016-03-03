@@ -44,8 +44,8 @@ ButtonBoard::ButtonBoard(int port) :
 	SAD_up->WhileHeld(new PositionCommand(Robot::robot , COMMAND_SAD_UP));
 	SAD_down->WhileHeld(new PositionCommand(Robot::robot , COMMAND_SAD_DOWN));
 
-	ball_in->WhenPressed(new BallInOutCommand(Robot::robot , true));
-	ball_out->WhenPressed(new BallInOutCommand(Robot::robot , false));
+	ball_in->WhileHeld(new BallInOutCommand(Robot::robot , true));
+	ball_out->WhileHeld(new BallInOutCommand(Robot::robot , false));
 	arms_up_and_out->WhenPressed(new ArmsUpAndOutCommand());
 }
 

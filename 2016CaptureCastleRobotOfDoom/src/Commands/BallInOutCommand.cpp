@@ -37,10 +37,10 @@ BallInOutCommand::Interrupted() {
 void
 BallInOutCommand::Execute() {
 	if(isIn) {
-		Robot::robot->startSpinners(.5);
+		Robot::robot->startSpinners(-.5);
 	}
 	else {
-		Robot::robot->startSpinners(-.25);
+		Robot::robot->startSpinners(.25);
 	}
 }
 
