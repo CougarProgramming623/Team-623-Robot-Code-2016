@@ -15,6 +15,7 @@ BallInOutCommand::BallInOutCommand(Robot *robot , bool isIn) {
 
 void
 BallInOutCommand::Initialize() {
+	isFinished = false;
 }
 
 bool
@@ -25,15 +26,7 @@ BallInOutCommand::IsFinished() {
 void
 BallInOutCommand::End() {
 	isFinished = true;
-	RobotMap::ballShooterSpinnerClockwise->Set(0);
-	RobotMap::ballShooterSpinnerCounterclockwise->Set(0);
-	if(!RobotMap::limitSpinnerSpringWinder->Get()) {
-		Robot::subsystemBallShooter->spinnerSpringWinder->Set(Relay::Value::kReverse);
-		while(!RobotMap::limitSpinnerSpringWinder->Get())
-			;
-		Wait(.5);
-		Robot::subsystemBallShooter->spinnerSpringWinder->Set(Relay::Value::kOff);
-	}
+	Robot::robot->stopSpinners();
 }
 
 void
@@ -44,10 +37,10 @@ BallInOutCommand::Interrupted() {
 void
 BallInOutCommand::Execute() {
 	if(isIn) {
-		Robot::robot->shoot(.5);
+		Robot::robot->startSpinners(.5);
 	}
 	else {
-		Robot::robot->shoot(.25);
+		Robot::robot->startSpinners(-.25);
 	}
 }
 

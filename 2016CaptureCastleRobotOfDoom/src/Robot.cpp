@@ -86,17 +86,25 @@ Robot::shoot() {
 	shoot(.5);
 }
 
+void Robot::startSpinners(double power) {
+	subsystemBallShooter->spinnerCounterclockwise->Set(power);
+	subsystemBallShooter->spinnerClockwise->Set(power);
+}
+
+void Robot::stopSpinners() {
+	subsystemBallShooter->spinnerCounterclockwise->StopMotor();
+	subsystemBallShooter->spinnerClockwise->StopMotor();
+}
+
 void
 Robot::shoot(double power) {
 	stopRobot();
-	subsystemBallShooter->spinnerCounterclockwise->Set(power);
-	subsystemBallShooter->spinnerClockwise->Set(power);
+	startSpinners(power);
 	Wait(.5); //TODO: Get time to wait
 	subsystemBallShooter->spinnerSpringWinder->Set(Relay::Value::kForward);
 	while(RobotMap::limitSpinnerSpringWinder->Get())
 		;
-	subsystemBallShooter->spinnerCounterclockwise->Set(0);
-	subsystemBallShooter->spinnerClockwise->Set(0);
+	startSpinners(0);
 	subsystemBallShooter->spinnerSpringWinder->Set(Relay::Value::kReverse);
 	while(!RobotMap::limitSpinnerSpringWinder->Get())
 		;
@@ -223,6 +231,7 @@ Robot::TeleopInit() {
 // teleop starts running. If you want the autonomous to
 // continue until interrupted by another command, remove
 // these lines or comment it out.
+
 	if(autonomousCommand != NULL)
 		autonomousCommand->Cancel();
 	RobotMap::ultrasonicPing->SetUpSourceEdge(true , false);
@@ -231,6 +240,7 @@ Robot::TeleopInit() {
 void
 Robot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
+	RobotMap::robotDrive41->TankDrive(Robot::oi->getJoystickLeft() , Robot::oi->getJoystickRight());
 
 //The Button of the All Mighty Board of Buttons
 	ButtonBoard* btnBoard = oi->getBtnBoard();
@@ -268,7 +278,7 @@ Robot::TeleopPeriodic() {
 	}
 
 	//DriverStation::ReportError("Potentiometer: " + std::to_string(RobotMap::potentiometer->Get()) + "\n"); //Change for debugging
-	DriverStation::ReportError("Ultrasonic: " + std::to_string(RobotMap::getUlrasonicFeet()) + "\n"); //Change for debugging
+//	DriverStation::ReportError("Ultrasonic: " + std::to_string(RobotMap::getUlrasonicFeet()) + "\n"); //Change for debugging
 }
 
 void

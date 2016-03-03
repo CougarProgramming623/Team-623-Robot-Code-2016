@@ -31,10 +31,11 @@ ButtonBoard::ButtonBoard(int port) :
 
 	//Commands
 
-	shoot->WhenPressed(new ShootCommand(Robot::robot));
+	shoot->WhileHeld(new ShootCommand(Robot::robot));
+
+	pos_auto_aim->WhileHeld(new PositionCommand(Robot::robot , COMMAND_AUTO_AIM));
 
 	pos_saftey->WhileHeld(new PositionCommand(Robot::robot , COMMAND_SAFETY));
-	pos_auto_aim->WhileHeld(new PositionCommand(Robot::robot , COMMAND_AUTO_AIM));
 	pos_pickup->WhileHeld(new PositionCommand(Robot::robot , COMMAND_PICK_UP));
 	port_down->WhileHeld(new PositionCommand(Robot::robot , COMMAND_PORTCULIS_DOWN));
 	port_up->WhileHeld(new PositionCommand(Robot::robot , COMMAND_PORTCULIS_UP));
@@ -45,7 +46,6 @@ ButtonBoard::ButtonBoard(int port) :
 
 	ball_in->WhenPressed(new BallInOutCommand(Robot::robot , true));
 	ball_out->WhenPressed(new BallInOutCommand(Robot::robot , false));
-
 	arms_up_and_out->WhenPressed(new ArmsUpAndOutCommand());
 }
 

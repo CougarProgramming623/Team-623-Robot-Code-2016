@@ -23,12 +23,12 @@
 
 class PositionCommand : public Command {
 	private:
-		double secondsSinceLastPressed;
 		bool isFinished;
 		int btnNumber;
 		Robot *robot;
-		time_t lastTime , currentTime;
 	public:
+		static double totalUltrasonicReadings;
+		static int ultrasonicReadingsCount;
 		PositionCommand(Robot*, int);
 		virtual void
 		Initialize();

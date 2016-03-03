@@ -76,6 +76,10 @@ class Robot : public IterativeRobot {
 		void
 		shoot(double);
 		void
+		startSpinners(double);
+		void
+		stopSpinners();
+		void
 		turnRobot(double);
 		void
 		turnRobot(double , double);

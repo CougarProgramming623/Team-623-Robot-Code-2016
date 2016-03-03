@@ -6,15 +6,18 @@
  */
 
 #include "ShootCommand.h"
+#include "PositionCommand.h"
 
 ShootCommand::ShootCommand(Robot *robot) {
 	isFinished = false;
+	isBallShot = true;
 	this->robot = robot;
-	isBallShot = false;
 }
 
 void
 ShootCommand::Initialize() {
+	isBallShot = false;
+	isFinished = false;
 }
 
 bool
@@ -25,37 +28,36 @@ ShootCommand::IsFinished() {
 void
 ShootCommand::End() {
 	isFinished = true;
+	RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kOff);
+	Robot::robot->stopSpinners();
 }
 
 void
 ShootCommand::Interrupted() {
+	End();
 }
 
 void
 ShootCommand::Execute() {
-	if(!isBallShot && !RobotMap::ballShooterSpinnerSpringWinder->Get()) {
-		//Stop Spinners and Kicker
-		RobotMap::ballShooterSpinnerClockwise->Set(0);
-		RobotMap::ballShooterSpinnerCounterclockwise->Set(0);
-		RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kOff);
-	}
-	else if(isBallShot) {
-		RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kReverse);
-	}
-	else {
-		//Aim
-		if(ultrasonicReadingsCount < 5) {
-			totalUltrasonicReadings += RobotMap::getUlrasonicFeet();
-			ultrasonicReadingsCount++;
+//	DriverStation::ReportError("SHOOT BALL SHOT=" + std::to_string(isBallShot));
+//	DriverStation::ReportError("SHOOT LSSW=" + std::to_string(RobotMap::limitSpinnerSpringWinder->Get()) + "\n");
+	if(!isBallShot) {
+		if(!RobotMap::limitSpinnerSpringWinder->Get()) {
+			RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kReverse);
+			Robot::robot->stopSpinners();
+			isBallShot = true;
 		}
 		else {
-			Robot::AutoAim(totalUltrasonicReadings / ultrasonicReadingsCount);
 			RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kForward);
 			RobotMap::ballShooterSpinnerClockwise->Set(.5);
 			RobotMap::ballShooterSpinnerCounterclockwise->Set(.5);
-			totalUltrasonicReadings = 0;
-			ultrasonicReadingsCount = 0;
 		}
 	}
+	else if(RobotMap::limitSpinnerSpringWinder->Get()) {
+		RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kOff);
+	}
+//	else {
+//		RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kForward);
+//	}
 }
 

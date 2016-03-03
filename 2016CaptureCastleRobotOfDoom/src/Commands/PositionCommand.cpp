@@ -7,17 +7,18 @@
 
 #include "PositionCommand.h"
 
+double PositionCommand::totalUltrasonicReadings = 0;
+int PositionCommand::ultrasonicReadingsCount = 0;
+
 PositionCommand::PositionCommand(Robot *robot , int btnNumber) {
 	isFinished = false;
 	this->robot = robot;
 	this->btnNumber = btnNumber;
-	time(&lastTime);
-	time(&currentTime);
-	secondsSinceLastPressed = 0;
 }
 
 void
 PositionCommand::Initialize() {
+	isFinished = false;
 }
 
 bool
@@ -47,20 +48,6 @@ PositionCommand::Interrupted() {
 
 void
 PositionCommand::Execute() {
-	/*if(btnNumber != COMMAND_SAFETY) {
-	 time(&currentTime);
-	 double dt = difftime(currentTime , lastTime);
-	 time(&lastTime);
-	 if(dt < .1) {
-	 secondsSinceLastPressed += dt;
-	 }
-	 else {
-	 secondsSinceLastPressed = 0;
-	 }
-	 if(secondsSinceLastPressed < .25) {
-	 return;
-	 }
-	 }*/
 	double position = 0;
 	switch (btnNumber) {
 		case COMMAND_SAFETY:
@@ -70,8 +57,16 @@ PositionCommand::Execute() {
 			position = RobotMap::degreeToPotentiometer(45);
 			break;
 		case COMMAND_AUTO_AIM:
-			Robot::AutoAim(RobotMap::getUlrasonicFeet());
-			break;
+			if(ultrasonicReadingsCount < 5) {
+				totalUltrasonicReadings += RobotMap::getUlrasonicFeet();
+				ultrasonicReadingsCount++;
+			}
+			else {
+				Robot::AutoAim(totalUltrasonicReadings / ultrasonicReadingsCount);
+				totalUltrasonicReadings = 0;
+				ultrasonicReadingsCount = 0;
+			}
+			return;
 		case COMMAND_PICK_UP:
 			position = RobotMap::degreeToPotentiometer(0);
 			break;
@@ -86,22 +81,25 @@ PositionCommand::Execute() {
 			break;
 		case COMMAND_SAD_DOWN:
 			position = RobotMap::potentiometer->Get() - RobotMap::degreeToPotentiometer(5);
+			if(position < 0)
+				position = 0;
 			break;
 		default:
 			position = RobotMap::degreeToPotentiometer(90);
 			break;
-	}
+	} // TODO: Scale the speed based on position up is faster and down is slower. The Check for limit switch
 	double currentPosition = Robot::getPoteniometerValue();
-	double speed = position - currentPosition;
-	if(speed > 1)
+	double speed = currentPosition - position;
+	if(speed > 0)
 		speed = 1;
-	else if(speed > 0 && speed < MIN_THRESHOLD)
-		speed = MIN_THRESHOLD;
-	if(speed < 1)
+	if(speed < 0)
 		speed = -1;
-	else if(speed < 0 && speed > -MIN_THRESHOLD)
-		speed = -MIN_THRESHOLD;
-	if(fabs(position - Robot::getPoteniometerValue() > .005))
+	DriverStation::ReportError("POSITION CURRENT=" + std::to_string(currentPosition));
+	DriverStation::ReportError("POSITION END=" + std::to_string(position));
+	DriverStation::ReportError("POSITION SPEED=" + std::to_string(speed) + "\n");
+	DriverStation::ReportError("FABS=" + std::to_string(fabs(position - Robot::getPoteniometerValue())) + "\n");
+
+	if(fabs(position - Robot::getPoteniometerValue()) > .005)
 		Robot::subsystemBallShooter->shooterAimingDevice->Set(.3 * speed); //Comment
 	else
 		Robot::subsystemBallShooter->shooterAimingDevice->Set(0);
