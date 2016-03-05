@@ -47,7 +47,7 @@
 #define L_SAD_POS_BASELINE 3
 
 //Height Counter (pulses)
-#define HEIGHT_COUNTER 5
+#define HEIGHT_COUNTER 4
 
 /**
  *The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -82,7 +82,7 @@ class RobotMap {
 
 		static DigitalInput *limitSpinnerSpringWinder;
 		static DigitalInput *limitSADPosBaseline;
-		static AnalogTrigger *heightCounter;
+		static DigitalInput *heightCounter;
 
 		static DigitalInput *autoLowBar;
 		static DigitalInput *autoSpyBox;

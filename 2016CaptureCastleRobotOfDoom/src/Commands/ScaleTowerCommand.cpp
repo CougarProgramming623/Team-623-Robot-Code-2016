@@ -10,6 +10,9 @@
 
 #include "ScaleTowerCommand.h"
 
+static const int HALFREVS_MAX = 29;
+static const float CLIMB_SPEED = 1;
+
 ScaleTowerCommand::ScaleTowerCommand() {
 	// Use requires() here to declare subsystem dependencies
 	// eg. requires(chassis);
@@ -21,42 +24,63 @@ ScaleTowerCommand::ScaleTowerCommand() {
 // Called just before this Command runs the first time
 void
 ScaleTowerCommand::Initialize() {
-	time(&lastTime);
-	time(&currentTime);
+	//time(&lastTime);
+	//time(&currentTime);
+	lastRevState = RobotMap::heightCounter->Get();
+	iterations = 0;
+	// release arm raising clips
+	RobotMap::armsUpAndOut->Set(Relay::Value::kForward);
 }
 
 // Called repeatedly when this Command is scheduled to run
 void
 ScaleTowerCommand::Execute() {
-	if(distanceTravelled >= 1.75 || counter >= MAX_REVOLUTIONS) { // Meters
-		isRunning = true;
-		return;
+	//if(distanceTravelled >= 1.75 || counter >= MAX_REVOLUTIONS) { // Meters
+	//	isRunning = true;
+	//	return;
+	//}
+	if (lastRevState != RobotMap::heightCounter->Get()) {
+		if (lastRevState) {
+			halfrevs++;
+		}
+		lastRevState = !lastRevState;
 	}
-	RobotMap::scaleTower->Set(1);
-
-	dt = difftime(time(&currentTime) , lastTime);
-	time (&lastTime);
-	double acceleration = Robot::robot->getAcceleration() * GRAVITY;
-	velocity += acceleration * dt; // v = v0 + a * t
-	distanceTravelled += velocity * dt + acceleration * dt * dt; // d = d0 + v0*t + a*t^2
-	counter += RobotMap::heightCounter->GetTriggerState() ? 1 : 0;
+	if (iterations > 250) {
+		// after the first revolution is complete, turn off the arm clip motors.
+		RobotMap::armsUpAndOut->Set(Relay::Value::kOff);
+	}
+	iterations++;
+	if (halfrevs < HALFREVS_MAX) {
+		RobotMap::scaleTower->Set(CLIMB_SPEED);
+		DriverStation::ReportWarning("Half Revs: " + std::to_string(halfrevs));
+		//DriverStation::ReportWarning("heightCounter: " + std::to_string(RobotMap::heightCounter->Get()));
+	} else {
+		RobotMap::scaleTower->StopMotor();
+	}
+	//dt = difftime(time(&currentTime) , lastTime);
+	//time (&lastTime);
+	//double acceleration = Robot::robot->getAcceleration() * GRAVITY;
+	//velocity += acceleration * dt; // v = v0 + a * t
+	//distanceTravelled += velocity * dt + acceleration * dt * dt; // d = d0 + v0*t + a*t^2
+	//counter += RobotMap::heightCounter->GetTriggerState() ? 1 : 0;
 }
 
 // Make this return true when this Command no longer needs to run execute()
 bool
 ScaleTowerCommand::IsFinished() {
-	return isRunning;
+	return false;
 }
 
 // Called once after isFinished returns true
 void
 ScaleTowerCommand::End() {
-	RobotMap::scaleTower->Set(0);
+	RobotMap::scaleTower->StopMotor();
+	RobotMap::armsUpAndOut->Set(Relay::Value::kOff);
 }
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
 void
 ScaleTowerCommand::Interrupted() {
-
+	End();
 }

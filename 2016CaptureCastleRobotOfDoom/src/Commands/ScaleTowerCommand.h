@@ -19,8 +19,9 @@
 class ScaleTowerCommand : public Command {
 	private:
 		time_t lastTime = 0 , currentTime = 0;
-		int counter = 0;
-		double distanceTravelled = 0 , velocity = 0 , dt = 0;bool isRunning = true;
+		int halfrevs = 0, iterations = 0;
+		bool lastRevState = false;
+		double distanceTravelled = 0 , velocity = 0 , dt = 0;
 	public:
 		ScaleTowerCommand();
 		virtual void

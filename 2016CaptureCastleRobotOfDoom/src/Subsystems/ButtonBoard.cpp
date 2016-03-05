@@ -11,6 +11,7 @@
 #include "../Commands/PositionCommand.h"
 #include "../Commands/BallInOutCommand.h"
 #include "../Commands/ArmsUpAndOutCommand.h"
+#include "../Commands/ScaleTowerCommand.h"
 
 ButtonBoard::ButtonBoard(int port) :
 	Joystick(port) {
@@ -46,7 +47,8 @@ ButtonBoard::ButtonBoard(int port) :
 
 	ball_in->WhileHeld(new BallInOutCommand(Robot::robot , true));
 	ball_out->WhileHeld(new BallInOutCommand(Robot::robot , false));
-	arms_up_and_out->WhenPressed(new ArmsUpAndOutCommand());
+	scale_tower->WhileHeld(new ScaleTowerCommand());
+	arms_up_and_out->WhileHeld(new ArmsUpAndOutCommand());
 }
 
 ButtonBoard::~ButtonBoard() {

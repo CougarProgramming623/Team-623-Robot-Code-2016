@@ -35,7 +35,7 @@ BuiltInAccelerometer* RobotMap::accelerometer = nullptr;
 
 DigitalInput* RobotMap::limitSpinnerSpringWinder = nullptr;
 DigitalInput* RobotMap::limitSADPosBaseline = nullptr;
-AnalogTrigger* RobotMap::heightCounter = nullptr;
+DigitalInput* RobotMap::heightCounter = nullptr;
 
 DigitalInput* RobotMap::autoLowBar = nullptr;
 DigitalInput* RobotMap::autoNotLowBar = nullptr;
@@ -81,7 +81,7 @@ RobotMap::init() {
 	limitSADPosBaseline = new DigitalInput(L_SAD_POS_BASELINE);
 
 	//Counter
-	heightCounter = new AnalogTrigger(HEIGHT_COUNTER);
+	heightCounter = new DigitalInput(HEIGHT_COUNTER);
 
 //Drive
 	robotDriveTreadRightFront = new Talon(FRONT_RIGHT);

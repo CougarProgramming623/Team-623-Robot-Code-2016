@@ -242,6 +242,7 @@ Robot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
 	RobotMap::robotDrive41->TankDrive(Robot::oi->getJoystickLeft() , Robot::oi->getJoystickRight());
 
+#if 0
 //The Button of the All Mighty Board of Buttons
 	ButtonBoard* btnBoard = oi->getBtnBoard();
 
@@ -276,7 +277,7 @@ Robot::TeleopPeriodic() {
 	else {
 		RobotMap::scaleTower->Set(0);
 	}
-
+#endif
 	//DriverStation::ReportError("Potentiometer: " + std::to_string(RobotMap::potentiometer->Get()) + "\n"); //Change for debugging
 //	DriverStation::ReportError("Ultrasonic: " + std::to_string(RobotMap::getUlrasonicFeet()) + "\n"); //Change for debugging
 }
