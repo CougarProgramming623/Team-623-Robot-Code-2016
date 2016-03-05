@@ -90,10 +90,21 @@ PositionCommand::Execute() {
 	} // TODO: Scale the speed based on position up is faster and down is slower. The Check for limit switch
 	double currentPosition = Robot::getPoteniometerValue();
 	double speed = currentPosition - position;
-	if(speed > 0)
-		speed = 1;
-	if(speed < 0)
-		speed = -1;
+
+	int sign;
+	if(speed < 0) {
+		sign = -1; // Up
+		speed = sign * cos(RobotMap::potentiometerToDegree(currentPosition) * M_PI / 180) + sign;
+		if(speed == 0)
+			speed = sign * cos(RobotMap::potentiometerToDegree(position) * M_PI / 180) + sign;
+	}
+	else if(speed > 0) {
+		sign = 1; // Down
+		speed = sign * sin(RobotMap::potentiometerToDegree(currentPosition) * M_PI / 180) + sign;
+		if(speed == 0)
+			speed = sign * sin(RobotMap::potentiometerToDegree(position) * M_PI / 180) + sign;
+	}
+
 	DriverStation::ReportError("POSITION CURRENT=" + std::to_string(currentPosition));
 	DriverStation::ReportError("POSITION END=" + std::to_string(position));
 	DriverStation::ReportError("POSITION SPEED=" + std::to_string(speed) + "\n");
