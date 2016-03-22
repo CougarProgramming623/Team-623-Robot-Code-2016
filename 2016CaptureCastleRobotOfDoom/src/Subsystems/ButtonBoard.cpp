@@ -38,7 +38,7 @@ ButtonBoard::ButtonBoard(int port) :
 
 	pos_auto_aim->WhileHeld(new PositionCommand(COMMAND_AUTO_AIM));
 
-	pos_saftey->WhileHeld(new PositionCommand(COMMAND_SAFETY));
+	pos_saftey->WhenPressed(new PositionCommand(COMMAND_SAFETY));
 	pos_pickup->WhileHeld(new PositionCommand(COMMAND_PICK_UP));
 	port_down->WhileHeld(new PositionCommand(COMMAND_PORTCULIS_DOWN));
 	port_up->WhileHeld(new PositionCommand(COMMAND_PORTCULIS_UP));
