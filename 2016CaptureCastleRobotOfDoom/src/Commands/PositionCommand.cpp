@@ -15,6 +15,7 @@ int PositionCommand::countPressed = 0; // TODO: Part of new code to move robot S
 PositionCommand::PositionCommand(int btnNumber) {
 	isFinished = false;
 	this->btnNumber = btnNumber;
+	Requires(RobotMap::positionSubsystem);
 }
 
 void
@@ -57,9 +58,6 @@ PositionCommand::Interrupted() {
 
 void
 PositionCommand::Execute() {
-	DriverStation::ReportError("Reporting Limit Switch: " + std::to_string(RobotMap::limitSADPosBaseline->Get())); //TODO: FROM UNTESTED PATCH (line 52 - line 57)
-	//time(&lastPositionClickTime);	//TODO: Do we Still Need this?????????????
-
 	double position = 0;
 
 	switch (btnNumber) {

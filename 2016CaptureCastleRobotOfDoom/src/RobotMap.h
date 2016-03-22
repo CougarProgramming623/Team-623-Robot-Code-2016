@@ -15,6 +15,7 @@
 #include "AnalogGyro.h"
 #include <Relay.h>
 #include "Robot.h"
+#include "Subsystems/PositionSubsystem.h"
 
 #define AUTO_LOW_BAR 7
 #define AUTO_SPY_BOX 8
@@ -63,6 +64,7 @@ class RobotMap {
 		static SpeedController *robotDriveTreadLeftFront;
 		static SpeedController *robotDriveTreadLeftBack;
 
+
 		static SpeedController *ballShooterSpinnerClockwise;
 		static SpeedController *ballShooterSpinnerCounterclockwise;
 		static SpeedController *shooterAimingDevice; // SAD = Shooter Aiming Device
@@ -73,6 +75,7 @@ class RobotMap {
 		static SpeedController *scaleTower;
 
 		static RobotDrive *robotDrive41;
+		static PositionSubsystem *positionSubsystem;
 
 		static AnalogPotentiometer *potentiometer;
 		static BuiltInAccelerometer *accelerometer;
