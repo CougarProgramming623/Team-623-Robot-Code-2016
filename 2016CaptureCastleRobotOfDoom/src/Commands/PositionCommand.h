@@ -8,7 +8,7 @@
 #ifndef SRC_COMMANDS_POSITIONCOMMAND_H_
 #define SRC_COMMANDS_POSITIONCOMMAND_H_
 
-#include "../Robot.h"
+#include "Commands/Command.h"
 
 #define COMMAND_SAFETY 0
 #define COMMAND_STORE 1
@@ -19,17 +19,21 @@
 #define COMMAND_SAD_UP 6
 #define COMMAND_SAD_DOWN 7
 
+#define COMMAND_AUTO_SAFETY 8
+
 #define MIN_THRESHOLD .5
 
 class PositionCommand : public Command {
 	private:
 		bool isFinished;
 		int btnNumber;
-		Robot *robot;
 	public:
+		//static time_t lastPositionClickTime;		//TODO:: Do we still need this
 		static double totalUltrasonicReadings;
-		static int ultrasonicReadingsCount;
-		PositionCommand(Robot*, int);
+		static int ultrasonicReadingsCount ,
+		// count pressed counts how many position buttons(red and green) are pressed at the same time
+		countPressed;
+		PositionCommand(int);
 		virtual void
 		Initialize();
 		virtual void

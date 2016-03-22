@@ -8,10 +8,8 @@
 #ifndef SRC_SUBSYSTEMS_BUTTONBOARD_H_
 #define SRC_SUBSYSTEMS_BUTTONBOARD_H_
 
-//TODO: Add a timer for raising shooter aiming device to saftey
-
-#include "Buttons/JoystickButton.h"
 #include "Joystick.h"
+#include "Buttons/JoystickButton.h"
 
 #define PORT_ARMS_UP_AND_OUT 11
 #define PORT_SHOOT 4
@@ -71,12 +69,9 @@ class ButtonBoard : public Joystick {
 		int
 		getPortPos();
 		int
-		getBallSpinner();
-		bool
-		getScaleTower();
-		bool
-		getArmsUpAndOut();
-		bool
+		getBallSpinner();bool
+		getScaleTower();bool
+		getArmsUpAndOut();bool
 		getShoot();
 };
 

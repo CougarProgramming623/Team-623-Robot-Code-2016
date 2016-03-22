@@ -7,9 +7,8 @@
 
 #include "BallInOutCommand.h"
 
-BallInOutCommand::BallInOutCommand(Robot *robot , bool isIn) {
+BallInOutCommand::BallInOutCommand(bool isIn) {
 	isFinished = false;
-	this->robot = robot;
 	this->isIn = isIn;
 }
 

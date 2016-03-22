@@ -6,12 +6,12 @@
  */
 
 #include "ShootCommand.h"
-#include "PositionCommand.h"
+#include "../Robot.h"
 
-ShootCommand::ShootCommand(Robot *robot) {
+ShootCommand::ShootCommand() {
 	isFinished = false;
 	isBallShot = true;
-	this->robot = robot;
+	counts = 0;
 }
 
 void
@@ -39,25 +39,24 @@ ShootCommand::Interrupted() {
 
 void
 ShootCommand::Execute() {
-//	DriverStation::ReportError("SHOOT BALL SHOT=" + std::to_string(isBallShot));
-//	DriverStation::ReportError("SHOOT LSSW=" + std::to_string(RobotMap::limitSpinnerSpringWinder->Get()) + "\n");
-	if(!isBallShot) {
-		if(!RobotMap::limitSpinnerSpringWinder->Get()) {
+//	if(!isBallShot) {
+//		if(!RobotMap::limitSpinnerSpringWinder->Get()) {		//OLD
+	counts++;
+		if(!isBallShot && counts * .02 < 6) {
+			if(!RobotMap::limitSpinnerSpringWinder->Get()) { // Reset
 			RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kReverse);
 			Robot::robot->stopSpinners();
 			isBallShot = true;
 		}
-		else {
+		else {	//Shoot
 			RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kForward);
 			RobotMap::ballShooterSpinnerClockwise->Set(.5);
 			RobotMap::ballShooterSpinnerCounterclockwise->Set(.5);
 		}
 	}
-	else if(RobotMap::limitSpinnerSpringWinder->Get()) {
+	else if(RobotMap::limitSpinnerSpringWinder->Get()) {		//Stop
+		counts = 0;
 		RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kOff);
 	}
-//	else {
-//		RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kForward);
-//	}
 }
 

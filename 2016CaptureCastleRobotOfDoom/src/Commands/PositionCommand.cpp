@@ -6,19 +6,22 @@
  */
 
 #include "PositionCommand.h"
+#include "../Robot.h"
 
 double PositionCommand::totalUltrasonicReadings = 0;
 int PositionCommand::ultrasonicReadingsCount = 0;
+int PositionCommand::countPressed = 0; // TODO: Part of new code to move robot SAD up to safety after buttons are released
 
-PositionCommand::PositionCommand(Robot *robot , int btnNumber) {
+PositionCommand::PositionCommand(int btnNumber) {
 	isFinished = false;
-	this->robot = robot;
 	this->btnNumber = btnNumber;
 }
 
 void
 PositionCommand::Initialize() {
 	isFinished = false;
+	if(btnNumber != COMMAND_AUTO_SAFETY)
+		countPressed++;
 }
 
 bool
@@ -28,8 +31,14 @@ PositionCommand::IsFinished() {
 
 void
 PositionCommand::End() {
+	if(btnNumber == COMMAND_PICK_UP)
+		Robot::robot->startSpinners(-.5);
+	else
+		Robot::robot->stopSpinners();
 	isFinished = true;
 	Robot::subsystemBallShooter->shooterAimingDevice->Set(0);
+	if(btnNumber != COMMAND_AUTO_SAFETY)
+		countPressed--;
 }
 
 void
@@ -48,25 +57,21 @@ PositionCommand::Interrupted() {
 
 void
 PositionCommand::Execute() {
+	DriverStation::ReportError("Reporting Limit Switch: " + std::to_string(RobotMap::limitSADPosBaseline->Get())); //TODO: FROM UNTESTED PATCH (line 52 - line 57)
+	//time(&lastPositionClickTime);	//TODO: Do we Still Need this?????????????
+
 	double position = 0;
+
 	switch (btnNumber) {
 		case COMMAND_SAFETY:
-			position = RobotMap::degreeToPotentiometer(112.5);
+			position = RobotMap::degreeToPotentiometer(90);
 			break;
 		case COMMAND_STORE:
 			position = RobotMap::degreeToPotentiometer(45);
 			break;
 		case COMMAND_AUTO_AIM:
-			if(ultrasonicReadingsCount < 5) {
-				totalUltrasonicReadings += RobotMap::getUlrasonicFeet();
-				ultrasonicReadingsCount++;
-			}
-			else {
-				Robot::AutoAim(totalUltrasonicReadings / ultrasonicReadingsCount);
-				totalUltrasonicReadings = 0;
-				ultrasonicReadingsCount = 0;
-			}
-			return;
+			position = .298;
+			break;
 		case COMMAND_PICK_UP:
 			position = RobotMap::degreeToPotentiometer(0);
 			break;
@@ -74,7 +79,7 @@ PositionCommand::Execute() {
 			position = RobotMap::degreeToPotentiometer(70);
 			break;
 		case COMMAND_PORTCULIS_DOWN:
-			position = RobotMap::degreeToPotentiometer(-.05);
+			position = RobotMap::degreeToPotentiometer(0); //I set this to 0 from -0.05
 			break;
 		case COMMAND_SAD_UP:
 			position = RobotMap::potentiometer->Get() + RobotMap::degreeToPotentiometer(5);
@@ -87,32 +92,44 @@ PositionCommand::Execute() {
 		default:
 			position = RobotMap::degreeToPotentiometer(90);
 			break;
-	} // TODO: Scale the speed based on position up is faster and down is slower. The Check for limit switch
+	} // TODO: Make sure bottom limit switch works, during last test the SAD would not move after reacing the Porticulis down position
+
+	if(btnNumber == COMMAND_PICK_UP)
+		Robot::robot->startSpinners(-.5);
+	else
+		Robot::robot->stopSpinners();
+
 	double currentPosition = Robot::getPoteniometerValue();
 	double speed = currentPosition - position;
+
+	if(RobotMap::limitSADPosBaseline->Get() && speed < 0) {
+		End();
+		return;
+	}
 
 	int sign;
 	if(speed < 0) {
 		sign = -1; // Up
-		speed = sign * cos(RobotMap::potentiometerToDegree(currentPosition) * M_PI / 180) + sign;
+//			speed = sign * cos(RobotMap::potentiometerToDegree(currentPosition) * M_PI / 180) + sign; //Old
+		speed = sign * cos(RobotMap::potentiometerToRadian(currentPosition)) + sign;
 		if(speed == 0)
-			speed = sign * cos(RobotMap::potentiometerToDegree(position) * M_PI / 180) + sign;
+			speed = sign * cos(RobotMap::potentiometerToRadian(position)) + sign;
 	}
-	else if(speed > 0) {
+	else if(speed > 0) { // TODO: Change to sin^2 and cos^2 and check code 				(Not sture if his todo still applies) we need to test the code
 		sign = 1; // Down
-		speed = sign * sin(RobotMap::potentiometerToDegree(currentPosition) * M_PI / 180) + sign;
-		if(speed == 0)
-			speed = sign * sin(RobotMap::potentiometerToDegree(position) * M_PI / 180) + sign;
+//			speed = sign * sin(RobotMap::potentiometerToDegree(currentPosition) * M_PI / 180) + sign; //Old
+		speed = sign * pow(sin(RobotMap::potentiometerToRadian(currentPosition)) , 2) + sign;
+		if(speed == 0) {
+//				speed = sign * sin(RobotMap::potentiometerToDegree(position) * M_PI / 180) + sign; //Old
+			speed = sign * pow(sin(RobotMap::potentiometerToRadian(position)) , 2) + sign;
+		}
 	}
 
-	DriverStation::ReportError("POSITION CURRENT=" + std::to_string(currentPosition));
-	DriverStation::ReportError("POSITION END=" + std::to_string(position));
-	DriverStation::ReportError("POSITION SPEED=" + std::to_string(speed) + "\n");
-	DriverStation::ReportError("FABS=" + std::to_string(fabs(position - Robot::getPoteniometerValue())) + "\n");
-
-	if(fabs(position - Robot::getPoteniometerValue()) > .005)
+	if(fabs(position - Robot::getPoteniometerValue()) > .01) {
 		Robot::subsystemBallShooter->shooterAimingDevice->Set(.3 * speed); //Comment
-	else
-		Robot::subsystemBallShooter->shooterAimingDevice->Set(0);
+	}
+	else {
+		End();
+	}
 }
 

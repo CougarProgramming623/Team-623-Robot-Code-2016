@@ -4,14 +4,16 @@
  *  Created on: Feb 20, 2016
  *      Author: CougarRobotics
  */
-#include "Joystick.h"
-#include "Buttons/JoystickButton.h"
+
+#include "../RobotMap.h"
 #include "ButtonBoard.h"
+
 #include "../Commands/ShootCommand.h"
 #include "../Commands/PositionCommand.h"
 #include "../Commands/BallInOutCommand.h"
 #include "../Commands/ArmsUpAndOutCommand.h"
 #include "../Commands/ScaleTowerCommand.h"
+#include "../Commands/ShooterResetCommand.h"
 
 ButtonBoard::ButtonBoard(int port) :
 	Joystick(port) {
@@ -32,23 +34,32 @@ ButtonBoard::ButtonBoard(int port) :
 
 	//Commands
 
-	shoot->WhileHeld(new ShootCommand(Robot::robot));
+	shoot->WhileHeld(new ShootCommand());
 
-	pos_auto_aim->WhileHeld(new PositionCommand(Robot::robot , COMMAND_AUTO_AIM));
+	pos_auto_aim->WhileHeld(new PositionCommand(COMMAND_AUTO_AIM));
 
-	pos_saftey->WhileHeld(new PositionCommand(Robot::robot , COMMAND_SAFETY));
-	pos_pickup->WhileHeld(new PositionCommand(Robot::robot , COMMAND_PICK_UP));
-	port_down->WhileHeld(new PositionCommand(Robot::robot , COMMAND_PORTCULIS_DOWN));
-	port_up->WhileHeld(new PositionCommand(Robot::robot , COMMAND_PORTCULIS_UP));
-	pos_store->WhileHeld(new PositionCommand(Robot::robot , COMMAND_STORE));
+	pos_saftey->WhileHeld(new PositionCommand(COMMAND_SAFETY));
+	pos_pickup->WhileHeld(new PositionCommand(COMMAND_PICK_UP));
+	port_down->WhileHeld(new PositionCommand(COMMAND_PORTCULIS_DOWN));
+	port_up->WhileHeld(new PositionCommand(COMMAND_PORTCULIS_UP));
+	pos_store->WhileHeld(new PositionCommand(COMMAND_STORE));
 
-	SAD_up->WhileHeld(new PositionCommand(Robot::robot , COMMAND_SAD_UP));
-	SAD_down->WhileHeld(new PositionCommand(Robot::robot , COMMAND_SAD_DOWN));
+	SAD_up->WhileHeld(new PositionCommand(COMMAND_SAD_UP));
+	SAD_down->WhileHeld(new PositionCommand(COMMAND_SAD_DOWN));
 
-	ball_in->WhileHeld(new BallInOutCommand(Robot::robot , true));
-	ball_out->WhileHeld(new BallInOutCommand(Robot::robot , false));
+	ball_in->WhileHeld(new BallInOutCommand(true));
+	ball_out->WhileHeld(new BallInOutCommand(false));
 	scale_tower->WhileHeld(new ScaleTowerCommand());
 	arms_up_and_out->WhileHeld(new ArmsUpAndOutCommand());
+
+	shoot->WhenReleased(new ShooterResetCommand());
+
+	//Set to safety after released
+	PositionCommand *commmandSafety = new PositionCommand(COMMAND_SAFETY);
+	pos_pickup->WhenReleased(commmandSafety);
+	port_down->WhenReleased(commmandSafety);
+	port_up->WhenReleased(commmandSafety);
+	pos_store->WhenReleased(commmandSafety);
 }
 
 ButtonBoard::~ButtonBoard() {

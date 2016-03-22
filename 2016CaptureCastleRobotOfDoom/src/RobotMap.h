@@ -97,7 +97,11 @@ class RobotMap {
 		static double
 		degreeToPotentiometer(double);
 		static double
+		radianToPotentiometer(double);
+		static double
 		potentiometerToDegree(double);
+		static double
+		potentiometerToRadian(double);
 		static double
 		getUlrasonicFeet();
 		static double

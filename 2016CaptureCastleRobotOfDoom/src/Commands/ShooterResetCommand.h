@@ -1,20 +1,20 @@
 /*
- * BallInOut.h
+ * ShootCommand.h
  *
  *  Created on: Feb 27, 2016
  *      Author: CougarRobotics
  */
 
-#ifndef SRC_COMMANDS_BALLINOUTCOMMAND_H_
-#define SRC_COMMANDS_BALLINOUTCOMMAND_H_
+#ifndef SRC_COMMANDS_SHOOTRESETCOMMAND_H_
+#define SRC_COMMANDS_SHOOTRESETCOMMAND_H_
 
 #include "../Robot.h"
 
-class BallInOutCommand : public Command {
+class ShooterResetCommand : public Command {
 	private:
-		bool isFinished , isIn;
+		int counts;bool isFinished , isBallShot , dontExecute;
 	public:
-		BallInOutCommand(bool);
+		ShooterResetCommand();
 		virtual void
 		Initialize();
 		virtual void
@@ -27,4 +27,4 @@ class BallInOutCommand : public Command {
 		Interrupted();
 };
 
-#endif /* SRC_COMMANDS_BALLINOUTCOMMAND_H_ */
+#endif /* SRC_COMMANDS_SHOOTCOMMAND_H_ */

@@ -8,14 +8,14 @@
 #ifndef SRC_COMMANDS_SHOOTCOMMAND_H_
 #define SRC_COMMANDS_SHOOTCOMMAND_H_
 
-#include "../Robot.h"
+#include "Commands/Command.h"
 
 class ShootCommand : public Command {
 	private:
+		int counts;
 		bool isFinished , isBallShot;
-		Robot *robot;
 	public:
-		ShootCommand(Robot*);
+		ShootCommand();
 		virtual void
 		Initialize();
 		virtual void
