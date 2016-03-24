@@ -126,17 +126,14 @@ PositionCommand::Execute() {
 	int sign;
 	if(speed < 0) {
 		sign = -1; // Up
-//			speed = sign * cos(RobotMap::potentiometerToDegree(currentPosition) * M_PI / 180) + sign; //Old
 		speed = sign * cos(RobotMap::potentiometerToRadian(currentPosition)) + sign;
 		if(speed == 0)
 			speed = sign * cos(RobotMap::potentiometerToRadian(position)) + sign;
 	}
-	else if(speed > 0) { // TODO: Change to sin^2 and cos^2 and check code 				(Not sture if his todo still applies) we need to test the code
+	else if(speed > 0) {
 		sign = 1; // Down
-//			speed = sign * sin(RobotMap::potentiometerToDegree(currentPosition) * M_PI / 180) + sign; //Old
 		speed = sign * pow(sin(RobotMap::potentiometerToRadian(currentPosition)) , 2) + sign;
 		if(speed == 0) {
-//				speed = sign * sin(RobotMap::potentiometerToDegree(position) * M_PI / 180) + sign; //Old
 			speed = sign * pow(sin(RobotMap::potentiometerToRadian(position)) , 2) + sign;
 		}
 	}

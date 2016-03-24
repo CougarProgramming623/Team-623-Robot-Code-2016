@@ -60,17 +60,38 @@ Robot::AutoAim(double averageDistanceToTowerFt) {
 void
 Robot::AimAngle(double angle) {
 	double currentPotentionmeter = Robot::getPoteniometerValue();
-	double finalPotentiometer = currentPotentionmeter - RobotMap::degreeToPotentiometer(angle); //TODO: Check during testing
-	RobotMap::shooterAimingDevice->Set(finalPotentiometer);
+	double finalPotentiometer = RobotMap::degreeToPotentiometer(angle); //TODO: Check during testing
+	double speed = currentPotentionmeter - finalPotentiometer;
+
+	if(RobotMap::limitSADPosBaseline->Get() && speed < 0) {
+		return;
+	}
+
+	int sign;
+	if(speed < 0) {
+		sign = -1; // Up
+		speed = sign * cos(RobotMap::potentiometerToRadian(currentPotentionmeter)) + sign;
+		if(speed == 0)
+			speed = sign * cos(RobotMap::potentiometerToRadian(finalPotentiometer)) + sign;
+	}
+	else if(speed > 0) {
+		sign = 1; // Down
+		speed = sign * pow(sin(RobotMap::potentiometerToRadian(currentPotentionmeter)) , 2) + sign;
+		if(speed == 0) {
+			speed = sign * pow(sin(RobotMap::potentiometerToRadian(finalPotentiometer)) , 2) + sign;
+		}
+	}
+
+	RobotMap::shooterAimingDevice->Set(speed);
 }
 
 //Sets SAD to specified angle
 void
 Robot::Aim(double angle) {
-	AimAngle(angle);
+
 	while(fabs(RobotMap::potentiometerToDegree(Robot::getPoteniometerValue()) - angle) < 2.5)
-		;
-	RobotMap::shooterAimingDevice->Set(0);
+		AimAngle(angle);
+	RobotMap::shooterAimingDevice->Set(-0.2);
 }
 
 double
@@ -221,7 +242,8 @@ Robot::AutonomousInit() {
 //	Wait(1.5);
 //	stopRobot();
 //	Aim()
-	moveRobotLinear(.35 , 5);
+	Aim(30);
+	moveRobotLinear(.35 , 15);
 	stopDriveMotors();
 	return;
 
