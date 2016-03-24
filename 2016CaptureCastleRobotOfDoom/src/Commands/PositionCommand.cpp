@@ -118,7 +118,7 @@ PositionCommand::Execute() {
 	double currentPosition = Robot::getPoteniometerValue();
 	double speed = currentPosition - position;
 
-	if(RobotMap::limitSADPosBaseline->Get() && speed < 0) {
+	if(!RobotMap::limitSADPosBaseline->Get() && speed > 0) {
 		End();
 		return;
 	}

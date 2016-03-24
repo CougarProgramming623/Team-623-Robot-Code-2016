@@ -63,10 +63,6 @@ Robot::AimAngle(double angle) {
 	double finalPotentiometer = RobotMap::degreeToPotentiometer(angle); //TODO: Check during testing
 	double speed = currentPotentionmeter - finalPotentiometer;
 
-	if(RobotMap::limitSADPosBaseline->Get() && speed < 0) {
-		return;
-	}
-
 	int sign;
 	if(speed < 0) {
 		sign = -1; // Up
@@ -82,16 +78,16 @@ Robot::AimAngle(double angle) {
 		}
 	}
 
-	RobotMap::shooterAimingDevice->Set(speed);
+	RobotMap::shooterAimingDevice->Set(.3 * speed);
 }
 
 //Sets SAD to specified angle
 void
 Robot::Aim(double angle) {
-
-	while(fabs(RobotMap::potentiometerToDegree(Robot::getPoteniometerValue()) - angle) < 2.5)
+	DriverStation::ReportError("Potentiometer: " + std::to_string(RobotMap::potentiometerToDegree(RobotMap::potentiometer->Get())));
+	while(fabs(RobotMap::potentiometerToDegree(Robot::getPoteniometerValue()) - angle) > 2.5)
 		AimAngle(angle);
-	RobotMap::shooterAimingDevice->Set(-0.2);
+	RobotMap::shooterAimingDevice->Set(-.1);
 }
 
 double
@@ -242,8 +238,14 @@ Robot::AutonomousInit() {
 //	Wait(1.5);
 //	stopRobot();
 //	Aim()
-	Aim(30);
-	moveRobotLinear(.35 , 15);
+
+	Aim(20);
+	moveRobotLinear(.5 , 5);
+	moveRobotLinear(.75 , 3.5);
+	stopDriveMotors();
+
+	Aim(90);
+	moveRobotLinear(.5 , 4);
 	stopDriveMotors();
 	return;
 
