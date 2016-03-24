@@ -36,8 +36,22 @@ PositionCommand::End() {
 		Robot::robot->startSpinners(-.5);
 	else
 		Robot::robot->stopSpinners();
+	if(btnNumber != COMMAND_SAFETY) {
+		double angle = RobotMap::potentiometerToRadian(Robot::getPoteniometerValue());
+
+		double latent_power = sin(angle);
+		latent_power *= -.05;
+
+
+		if(Robot::getPoteniometerValue() < .15) {
+			latent_power *= 2;
+		}
+
+		Robot::subsystemBallShooter->shooterAimingDevice->Set(latent_power);
+	}
+	else
+		Robot::subsystemBallShooter->shooterAimingDevice->StopMotor();
 	isFinished = true;
-	Robot::subsystemBallShooter->shooterAimingDevice->Set(0);
 	if(btnNumber != COMMAND_AUTO_SAFETY)
 		countPressed--;
 }
@@ -49,11 +63,11 @@ PositionCommand::Interrupted() {
 
 /*
  Potentiometer measurements
- 90 degrees - 0.43
- 45 degrees - 0.25
- 0 degrees - 0.07
- All in (Max) - 0.52 (112.5 deg)
- All down (Min) - 0.05 (-.05 deg)
+ 90 degrees - 0.478
+ 45 degrees - 0.338
+ 0 degrees - 0.15
+ All in (Max) - 0.6 (120 deg)
+ All down (Min) - 0.094 (-3 deg)
  * */
 
 void
@@ -68,7 +82,7 @@ PositionCommand::Execute() {
 			position = RobotMap::degreeToPotentiometer(45);
 			break;
 		case COMMAND_AUTO_AIM:
-			position = .298;
+			position = .298;                             //TODO: GET Number
 			break;
 		case COMMAND_PICK_UP:
 			position = RobotMap::degreeToPotentiometer(0);

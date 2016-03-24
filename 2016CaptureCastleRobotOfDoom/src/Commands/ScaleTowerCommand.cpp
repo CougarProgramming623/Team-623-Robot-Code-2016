@@ -35,10 +35,6 @@ ScaleTowerCommand::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void
 ScaleTowerCommand::Execute() {
-	//if(distanceTravelled >= 1.75 || counter >= MAX_REVOLUTIONS) { // Meters
-	//	isRunning = true;
-	//	return;
-	//}
 	if (lastRevState != RobotMap::heightCounter->Get()) {
 		if (lastRevState) {
 			halfrevs++;

@@ -105,7 +105,7 @@ Robot::stopSpinners() {
 
 void
 Robot::shoot(double power) {
-	stopRobot();
+	stopDriveMotors();
 	startSpinners(power);
 	Wait(.5); //TODO: Get time to wait
 	subsystemBallShooter->spinnerSpringWinder->Set(Relay::Value::kForward);
@@ -135,34 +135,57 @@ Robot::turnRobot(double power , double degrees) {
 	float gyroRotation = RobotMap::gyro->GetAngle();
 	while(fmod(3600 + RobotMap::gyro->GetAngle() - gyroRotation - degrees , 360) > 5)
 		;
-	stopRobot();
+	stopDriveMotors();
 }
+
+double Robot::nominalAngle = 0;
 
 //Moves robot forward or backward with a specified power
 void
 Robot::moveRobotLinear(double power) { // -1 = backward 1 = forwards
-	subsystemDrive->treadLeftFront->Set(power);
-	subsystemDrive->treadLeftBack->Set(power);
-	subsystemDrive->treadRightFront->Set(power);
-	subsystemDrive->treadRightBack->Set(power);
+//	double currentAngle = 0;
+//	int iterations = 10;
+//	for(int i = 0; i < iterations; i++)
+//		currentAngle += RobotMap::gyro->GetAngle() * M_PI / 180;
+//	currentAngle /= iterations;
+	double leftPower = power * .86 , rightPower = power;
+
+//	DriverStation::ReportError("Nominal: " + std::to_string(nominalAngle));
+//	DriverStation::ReportError("Current: " + std::to_string(currentAngle));
+
+	//TODO: Test this!!!
+//	if(nominalAngle < currentAngle)
+//		rightPower = power * sin(nominalAngle - currentAngle);
+//	else
+//		leftPower = power * sin(currentAngle - nominalAngle);
+
+	subsystemDrive->treadLeftFront->Set(-leftPower);
+	subsystemDrive->treadLeftBack->Set(-leftPower);
+	subsystemDrive->treadRightFront->Set(rightPower);
+	subsystemDrive->treadRightBack->Set(rightPower);
 }
 
 //Moves robot forward or backward a specified distance
 void
 Robot::moveRobotLinear(double power , double distance) { // in meters
-	moveRobotLinear(power);
-	time_t initTime , currentTime;
-	time(&initTime);
-	double distanceTravelled = 0 , velocity = 0 , seconds;
-	while(distanceTravelled < distance) {
-		seconds = difftime(time(&currentTime) , initTime);
-		time(&initTime);
-		double acceleration = getAcceleration() * GRAVITY;
-		velocity += acceleration * seconds; // v = v0 + a * t
-		distanceTravelled += velocity * seconds + acceleration * seconds * seconds; // d = d0 + v0*t + a*t^2
+//	nominalAngle = 0;
+//	int iterations = 10;
+//	for(int i = 0; i < iterations; i++)
+//		nominalAngle += RobotMap::gyro->GetAngle() * M_PI / 180;
+//	nominalAngle /= iterations;
+#ifdef USE_TWO_REV_COUNTERS
+								RobotMap::resetRevCounters();
+								while(RobotMap::getTotalDistanceTravelled() < distance) {
+									RobotMap::updateRevCounters();
+#else
+	RobotMap::resetRevCounter();
+	while(RobotMap::getDistanceTravelled() < distance) {
+		RobotMap::updateRevCounter();
+//		DriverStation::ReportError(std::to_string(RobotMap::getDistanceTravelled()));
+#endif
 		moveRobotLinear(power);
 	}
-	stopRobot();
+	stopDriveMotors();
 }
 
 double
@@ -171,7 +194,7 @@ Robot::getAcceleration() {
 	return sqrt(pow(subsystemInput->accelerometer->GetX() , 2) + pow(subsystemInput->accelerometer->GetY() , 2));
 }
 void
-Robot::stopRobot() {
+Robot::stopDriveMotors() {
 	moveRobotLinear(0); //This makes the robot to STOP
 }
 
@@ -197,11 +220,10 @@ Robot::AutonomousInit() {
 //	moveRobotLinear(.5);
 //	Wait(1.5);
 //	stopRobot();
-	moveRobotLinear(1);
-	turnRobot(1 , 90);
-	stopRobot();
-	if(true)
-		return;
+//	Aim()
+	moveRobotLinear(.35 , 5);
+	stopDriveMotors();
+	return;
 
 	if(autonomousCommand != NULL)
 		autonomousCommand->Start();
@@ -266,6 +288,9 @@ void
 Robot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
 	RobotMap::robotDrive41->TankDrive(Robot::oi->getJoystickLeft() , Robot::oi->getJoystickRight());
+	DriverStation::ReportError("Potentiometer: " + std::to_string(RobotMap::potentiometer->Get()) + "\n"); //Change for debugging
+	RobotMap::updateRevCounter();
+	//DriverStation::ReportError("Distance Traveled: " + std::to_string(RobotMap::getDistanceTravelled()) + "\n");
 
 //#if 0		//TODO: Never Runs I'm keeping it because of reasons
 ////The Button of the All Mighty Board of Buttons
@@ -304,7 +329,6 @@ Robot::TeleopPeriodic() {
 //	}
 //#endif
 
-	DriverStation::ReportError("Potentiometer: " + std::to_string(RobotMap::potentiometer->Get()) + "\n"); //Change for debugging
 	//	DriverStation::ReportError("Ultrasonic: " + std::to_string(RobotMap::getUlrasonicFeet()) + "\n"); //Change for debugging
 }
 

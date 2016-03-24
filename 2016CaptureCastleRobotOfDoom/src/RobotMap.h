@@ -42,6 +42,23 @@
 #define PORT_ULTRASONIC_PING 6
 #define PORT_ULTRASONIC_ECHO 7
 
+//Rev Counters
+//#define USE_TWO_REV_COUNTERS
+
+#ifdef USE_TWO_REV_COUNTERS
+
+#define PORT_REV_COUNTER_LEFT 5
+#define PORT_REV_COUNTER_RIGHT 0
+#define METERS_PER_REV_LEFT 0
+#define METERS_PER_REV_RIGHT 0
+
+#else
+
+#define PORT_REV_COUNTER 5
+#define FEET_PER_REV (0.472)     //TODO: GET meters per rev
+
+#endif
+
 //Limit Switches
 #define L_SPINNER_SPRING_WINDER 2
 #define L_SAD_POS_UPPERBOUND 4
@@ -63,7 +80,6 @@ class RobotMap {
 		static SpeedController *robotDriveTreadRightBack;
 		static SpeedController *robotDriveTreadLeftFront;
 		static SpeedController *robotDriveTreadLeftBack;
-
 
 		static SpeedController *ballShooterSpinnerClockwise;
 		static SpeedController *ballShooterSpinnerCounterclockwise;
@@ -87,6 +103,18 @@ class RobotMap {
 		static DigitalInput *limitSADPosBaseline;
 		static DigitalInput *heightCounter;
 
+		//Rev Counter
+#ifdef USE_TWO_REV_COUNTERS
+		static DigitalInput *revCounterInputLeft;
+		static DigitalInput *revCounterInputRight;
+		static int revCounterLeft;
+		static int revCounterRight;
+#else
+		static DigitalInput *revCounterInput;
+		static int revCounter;
+#endif
+		static bool oldRevState;
+
 		static DigitalInput *autoLowBar;
 		static DigitalInput *autoSpyBox;
 		static DigitalInput *autoNotLowBar;
@@ -109,5 +137,25 @@ class RobotMap {
 		getUlrasonicFeet();
 		static double
 		getUlrasonicMeters();
+#ifdef USE_TWO_REV_COUNTERS
+		static void
+		resetRevCounters();
+		static void
+		updateRevCounters();
+		static double
+		getTotalDistanceTravelled();
+		static double
+		getDistanceTravelledLeft();
+		static double
+		getDistanceTravelledRight();
+#else
+		static void
+		resetRevCounter();
+		static void
+		updateRevCounter();
+		static double
+		getDistanceTravelled();
+#endif
 };
+
 #endif
