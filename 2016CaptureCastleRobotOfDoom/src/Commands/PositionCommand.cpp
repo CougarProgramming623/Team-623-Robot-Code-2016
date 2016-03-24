@@ -86,13 +86,13 @@ PositionCommand::Execute() {
 			position = RobotMap::degreeToPotentiometer(45);
 			break;
 		case COMMAND_AUTO_AIM:
-			position = .298; //TODO: GET Number
+			position = RobotMap::degreeToPotentiometer(70);
 			break;
 		case COMMAND_PICK_UP:
 			position = RobotMap::degreeToPotentiometer(0);
 			break;
 		case COMMAND_PORTCULIS_UP:
-			position = RobotMap::degreeToPotentiometer(70);
+			position = RobotMap::degreeToPotentiometer(65);
 			break;
 		case COMMAND_PORTCULIS_DOWN:
 			position = RobotMap::degreeToPotentiometer(0); //I set this to 0 from -0.05
