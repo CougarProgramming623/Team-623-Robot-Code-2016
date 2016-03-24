@@ -288,7 +288,7 @@ void
 Robot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
 	RobotMap::robotDrive41->TankDrive(Robot::oi->getJoystickLeft() , Robot::oi->getJoystickRight());
-	DriverStation::ReportError("Potentiometer: " + std::to_string(RobotMap::potentiometer->Get()) + "\n"); //Change for debugging
+//	DriverStation::ReportError("Potentiometer: " + std::to_string(RobotMap::potentiometer->Get()) + "\n"); //Change for debugging
 	RobotMap::updateRevCounter();
 	//DriverStation::ReportError("Distance Traveled: " + std::to_string(RobotMap::getDistanceTravelled()) + "\n");
 

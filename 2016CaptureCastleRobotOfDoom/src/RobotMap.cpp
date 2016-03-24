@@ -106,7 +106,7 @@ RobotMap::init() {
 #else
 
 	revCounterInput = new DigitalInput(PORT_REV_COUNTER);
-	oldRevState =  revCounterInput->Get();
+	oldRevState = revCounterInput->Get();
 
 #endif
 
@@ -136,7 +136,7 @@ RobotMap::init() {
 
 	//Ball Shooter
 	shooterAimingDevice = new Talon(PORT_SAD);
-	shooterAimingDevice->SetInverted(true);
+//	shooterAimingDevice->SetInverted(true);
 	lw->AddActuator("Position Subsystem" , "SAD" , (Talon*) shooterAimingDevice);
 
 	ballShooterSpinnerClockwise = new Talon(SPINNER_CW);
@@ -168,7 +168,7 @@ RobotMap::radianToPotentiometer(double radian) {
 
 double
 RobotMap::potentiometerToDegree(double potentiometer) {
-	return potentiometer * 253 - 33.6;
+	return (potentiometer - .097) / .004;
 }
 
 double
@@ -178,7 +178,7 @@ RobotMap::potentiometerToRadian(double potentiometer) {
 
 double
 RobotMap::degreeToPotentiometer(double degree) {
-	return (fmod(degree , 360) - 33.6) / 253;
+	return (fmod(degree , 360) * 0.004) + 0.097;
 }
 
 double
@@ -235,7 +235,6 @@ RobotMap::resetRevCounter() {
 
 void
 RobotMap::updateRevCounter() {
-	DriverStation::ReportError(std::to_string(revCounterInput->Get()));
 	bool revState = revCounterInput->Get();
 	if(revState != oldRevState) {
 		if(revState)
@@ -245,7 +244,7 @@ RobotMap::updateRevCounter() {
 }
 
 double
-RobotMap::getDistanceTravelled() {				//	10 ft = 21.2 units on average
+RobotMap::getDistanceTravelled() { //	10 ft = 21.2 units on average
 	return revCounter * FEET_PER_REV;
 }
 

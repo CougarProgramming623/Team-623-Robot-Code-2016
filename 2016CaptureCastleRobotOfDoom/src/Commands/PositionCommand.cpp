@@ -36,16 +36,20 @@ PositionCommand::End() {
 		Robot::robot->startSpinners(-.5);
 	else
 		Robot::robot->stopSpinners();
+
+	double angle = RobotMap::potentiometerToRadian(Robot::getPoteniometerValue());
+	DriverStation::ReportError("Angle: " + std::to_string(angle * 180 / M_PI));
+
 	if(btnNumber != COMMAND_SAFETY) {
-		double angle = RobotMap::potentiometerToRadian(Robot::getPoteniometerValue());
 
 		double latent_power = sin(angle);
 		latent_power *= -.05;
 
-
-		if(Robot::getPoteniometerValue() < .15) {
-			latent_power *= 2;
+		if(Robot::getPoteniometerValue() < RobotMap::degreeToPotentiometer(30)) {
+			DriverStation::ReportError("Hit Threshold: ");
+			latent_power = -.2;
 		}
+		DriverStation::ReportError("Latent Power: " + std::to_string(latent_power));
 
 		Robot::subsystemBallShooter->shooterAimingDevice->Set(latent_power);
 	}
@@ -63,11 +67,11 @@ PositionCommand::Interrupted() {
 
 /*
  Potentiometer measurements
- 90 degrees - 0.478
- 45 degrees - 0.338
- 0 degrees - 0.15
- All in (Max) - 0.6 (120 deg)
- All down (Min) - 0.094 (-3 deg)
+ 90 degrees - 0.460
+ 45 degrees - 0.277
+ 0 degrees - 0.098
+ All in (Max) - 0.6 (120 deg)  //Didn't do
+ All down (Min) - 0.09 (-3 deg)  //Didn't do (except for -2.5 deg)
  * */
 
 void
@@ -82,7 +86,7 @@ PositionCommand::Execute() {
 			position = RobotMap::degreeToPotentiometer(45);
 			break;
 		case COMMAND_AUTO_AIM:
-			position = .298;                             //TODO: GET Number
+			position = .298; //TODO: GET Number
 			break;
 		case COMMAND_PICK_UP:
 			position = RobotMap::degreeToPotentiometer(0);
