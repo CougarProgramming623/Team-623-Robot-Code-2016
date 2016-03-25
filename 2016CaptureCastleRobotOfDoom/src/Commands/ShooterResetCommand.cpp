@@ -50,7 +50,7 @@ void
 ShooterResetCommand::Execute() {
 	while(!isFinished) {
 		counts++;
-		if(!isBallShot && counts * .02 < 6) {
+		if(!isBallShot && counts * .02 < 3) {
 			if(!RobotMap::limitSpinnerSpringWinder->Get()) { // Reset
 				RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kReverse);
 				Robot::robot->stopSpinners();
@@ -61,10 +61,14 @@ ShooterResetCommand::Execute() {
 				return;
 			}
 		}
-		else if(RobotMap::limitSpinnerSpringWinder->Get()) { //Stop
-			counts = 0;
-			End();
-			return;
+		else {
+			if(counts * .02 >= 3)
+				DriverStation::ReportWarning("DON'T SHOOT!!!! THE LIMIT SWITCH FOR THE SPRING WINDER IS NOT WORKING");
+			if(RobotMap::limitSpinnerSpringWinder->Get()) { //Stop
+				counts = 0;
+				End();
+				return;
+			}
 		}
 	}
 }
