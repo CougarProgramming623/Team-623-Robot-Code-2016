@@ -43,12 +43,13 @@ PositionCommand::End() {
 	if(btnNumber != COMMAND_SAFETY) {
 
 		double latent_power = sin(angle);
-		latent_power *= -.05;
-
-		if(Robot::getPoteniometerValue() < RobotMap::degreeToPotentiometer(30)) {
-			DriverStation::ReportError("Hit Threshold: ");
-			latent_power = -.2;
-		}
+		latent_power = -.2;
+//		latent_power *= -.05;
+//
+//		if(Robot::getPoteniometerValue() < RobotMap::degreeToPotentiometer(30)) {
+//			DriverStation::ReportError("Hit Threshold: ");
+//			latent_power = -.2;
+//		}
 		DriverStation::ReportError("Latent Power: " + std::to_string(latent_power));
 
 		Robot::subsystemBallShooter->shooterAimingDevice->Set(latent_power);

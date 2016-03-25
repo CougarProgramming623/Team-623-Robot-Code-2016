@@ -136,7 +136,7 @@ RobotMap::init() {
 
 	//Ball Shooter
 	shooterAimingDevice = new Talon(PORT_SAD);
-//	shooterAimingDevice->SetInverted(true);
+	shooterAimingDevice->SetInverted(true);
 	lw->AddActuator("Position Subsystem" , "SAD" , (Talon*) shooterAimingDevice);
 
 	ballShooterSpinnerClockwise = new Talon(SPINNER_CW);

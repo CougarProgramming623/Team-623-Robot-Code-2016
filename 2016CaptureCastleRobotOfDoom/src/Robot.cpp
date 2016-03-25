@@ -188,25 +188,35 @@ Robot::moveRobotLinear(double power) { // -1 = backward 1 = forwards
 
 //Moves robot forward or backward a specified distance
 void
-Robot::moveRobotLinear(double power , double distance) { // in meters
+Robot::moveRobotLinear(double power , double distance) {
 //	nominalAngle = 0;
 //	int iterations = 10;
 //	for(int i = 0; i < iterations; i++)
 //		nominalAngle += RobotMap::gyro->GetAngle() * M_PI / 180;
 //	nominalAngle /= iterations;
+	static double sPower, sDistance;
+	if(distance == 0){
+		power = sPower;
+		distance = sDistance;
+	}
+	else
+	{
+		sPower = power;
+		sDistance = distance;
+		RobotMap::resetRevCounter();
+	}
 #ifdef USE_TWO_REV_COUNTERS
 								RobotMap::resetRevCounters();
 								while(RobotMap::getTotalDistanceTravelled() < distance) {
 									RobotMap::updateRevCounters();
 #else
-	RobotMap::resetRevCounter();
-	while(RobotMap::getDistanceTravelled() < distance) {
+
+	if(RobotMap::getDistanceTravelled() < distance) {
 		RobotMap::updateRevCounter();
 //		DriverStation::ReportError(std::to_string(RobotMap::getDistanceTravelled()));
 #endif
 		moveRobotLinear(power);
 	}
-	stopDriveMotors();
 }
 
 double
@@ -237,14 +247,8 @@ void
 Robot::AutonomousInit() {
 	//This is where autonomous is called
 
-	//This chunk of code was just if we maybe ran during competition
-//	moveRobotLinear(.5);
-//	Wait(1.5);
-//	stopRobot();
-//	Aim()
-	Aim(30);
-	moveRobotLinear(.35 , 15);
-	stopDriveMotors();
+	moveRobotLinear(1 , 7);	//Set aUto power to 1 from .5
+	//stopDriveMotors();
 	return;
 
 	if(autonomousCommand != NULL)
@@ -261,9 +265,10 @@ Robot::AutonomousInit() {
 	}
 }
 
-//Autonomous program (Look at notes for autonomous instructions)
+//Autonomous program: Here Autnomous is looped throughout the period of autonomous time
 void
 Robot::AutonomousPeriodic() { //Start in center Area when closer to low bar	//TODO: TEST autonomous code
+	moveRobotLinear(0, 0);
 	return; //TODO: DELETE WHEN READY TO TEST AUTONOMOUS
 
 	switch (RobotMap::autoSelector) {
