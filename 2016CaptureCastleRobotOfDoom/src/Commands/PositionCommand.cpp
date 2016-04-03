@@ -43,7 +43,7 @@ PositionCommand::End() {
 	if(btnNumber != COMMAND_SAFETY) {
 
 		double latent_power = sin(angle);
-		latent_power = -.2;
+		latent_power = -.17;
 //		latent_power *= -.05;
 //
 //		if(Robot::getPoteniometerValue() < RobotMap::degreeToPotentiometer(30)) {
@@ -81,7 +81,7 @@ PositionCommand::Execute() {
 
 	switch (btnNumber) {
 		case COMMAND_SAFETY:
-			position = RobotMap::degreeToPotentiometer(90);
+			position = RobotMap::degreeToPotentiometer(95);
 			break;
 		case COMMAND_STORE:
 			position = RobotMap::degreeToPotentiometer(45);
@@ -90,13 +90,13 @@ PositionCommand::Execute() {
 			position = RobotMap::degreeToPotentiometer(70);
 			break;
 		case COMMAND_PICK_UP:
-			position = RobotMap::degreeToPotentiometer(0);
+			position = RobotMap::degreeToPotentiometer(8);
 			break;
 		case COMMAND_PORTCULIS_UP:
 			position = RobotMap::degreeToPotentiometer(65);
 			break;
 		case COMMAND_PORTCULIS_DOWN:
-			position = RobotMap::degreeToPotentiometer(0); //I set this to 0 from -0.05
+			position = RobotMap::degreeToPotentiometer(8); //I set this to 0 from -0.05
 			break;
 		case COMMAND_SAD_UP:
 			position = RobotMap::potentiometer->Get() + RobotMap::degreeToPotentiometer(5);
@@ -107,7 +107,7 @@ PositionCommand::Execute() {
 				position = 0;
 			break;
 		default:
-			position = RobotMap::degreeToPotentiometer(90);
+			position = RobotMap::degreeToPotentiometer(95);
 			break;
 	} // TODO: Make sure bottom limit switch works, during last test the SAD would not move after reacing the Porticulis down position
 

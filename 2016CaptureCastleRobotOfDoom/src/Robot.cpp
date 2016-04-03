@@ -88,7 +88,6 @@ Robot::AimAngle(double angle) {
 //Sets SAD to specified angle
 void
 Robot::Aim(double angle) {
-
 	while(fabs(RobotMap::potentiometerToDegree(Robot::getPoteniometerValue()) - angle) < 2.5)
 		AimAngle(angle);
 	RobotMap::shooterAimingDevice->Set(-0.2);
@@ -194,21 +193,20 @@ Robot::moveRobotLinear(double power , double distance) {
 //	for(int i = 0; i < iterations; i++)
 //		nominalAngle += RobotMap::gyro->GetAngle() * M_PI / 180;
 //	nominalAngle /= iterations;
-	static double sPower, sDistance;
-	if(distance == 0){
+	static double sPower , sDistance;
+	if(distance == 0) {
 		power = sPower;
 		distance = sDistance;
 	}
-	else
-	{
+	else {
 		sPower = power;
 		sDistance = distance;
 		RobotMap::resetRevCounter();
 	}
 #ifdef USE_TWO_REV_COUNTERS
-								RobotMap::resetRevCounters();
-								while(RobotMap::getTotalDistanceTravelled() < distance) {
-									RobotMap::updateRevCounters();
+	RobotMap::resetRevCounters();
+	while(RobotMap::getTotalDistanceTravelled() < distance) {
+		RobotMap::updateRevCounters();
 #else
 
 	if(RobotMap::getDistanceTravelled() < distance) {
@@ -243,11 +241,13 @@ Robot::DisabledPeriodic() {
 	Scheduler::GetInstance()->Run();
 }
 
+#define DISTANCE_TO_TRAVEL 7
+
 void
 Robot::AutonomousInit() {
 	//This is where autonomous is called
 
-	moveRobotLinear(1 , 7);	//Set aUto power to 1 from .5
+	moveRobotLinear(1 , DISTANCE_TO_TRAVEL); //Set aUto power to 1 from .5
 	//stopDriveMotors();
 	return;
 
@@ -268,9 +268,19 @@ Robot::AutonomousInit() {
 //Autonomous program: Here Autnomous is looped throughout the period of autonomous time
 void
 Robot::AutonomousPeriodic() { //Start in center Area when closer to low bar	//TODO: TEST autonomous code
-	moveRobotLinear(0, 0);
-	return; //TODO: DELETE WHEN READY TO TEST AUTONOMOUS
+	moveRobotLinear(0 , 0);
 
+/*  TODO: Uncomment if using low bar or if we need to fire ball during autonomous
+	if(RobotMap::getDistanceTravelled() >= DISTANCE_TO_TRAVEL) {
+		AimAngle(70);
+		if(fabs(RobotMap::potentiometerToDegree(RobotMap::potentiometer->Get()) - 70) < 2)
+			shoot();
+	}
+
+*/
+	return;
+
+/*
 	switch (RobotMap::autoSelector) {
 		case 0: // Start at center near low bar
 			Aim(10);
@@ -293,6 +303,7 @@ Robot::AutonomousPeriodic() { //Start in center Area when closer to low bar	//TO
 			moveRobotLinear(1 , 1.1);
 			break;
 	}
+*/
 }
 
 void
@@ -315,8 +326,8 @@ void
 Robot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
 	RobotMap::robotDrive41->TankDrive(Robot::oi->getJoystickLeft() , Robot::oi->getJoystickRight());
-//	DriverStation::ReportError("Potentiometer: " + std::to_string(RobotMap::potentiometer->Get()) + "\n"); //Change for debugging
 	RobotMap::updateRevCounter();
+//	DriverStation::ReportError("Potentiometer: " + std::to_string(RobotMap::potentiometer->Get()) + "\n"); //Change for debugging
 	//DriverStation::ReportError("Distance Traveled: " + std::to_string(RobotMap::getDistanceTravelled()) + "\n");
 
 //#if 0		//TODO: Never Runs I'm keeping it because of reasons
