@@ -34,14 +34,14 @@ ButtonBoard::ButtonBoard(int port) :
 
 	//Commands
 
-	shoot->WhileHeld(new ShootCommand());
+	shoot->WhenPressed(new ShootCommand());
 
 	pos_auto_aim->WhileHeld(new PositionCommand(COMMAND_AUTO_AIM));
 
 	pos_saftey->WhenPressed(new PositionCommand(COMMAND_SAFETY));
 	pos_pickup->WhileHeld(new PositionCommand(COMMAND_PICK_UP));
 	port_down->WhileHeld(new PositionCommand(COMMAND_PORTCULIS_DOWN));
-	port_up->WhileHeld(new PositionCommand(COMMAND_PORTCULIS_UP));
+	port_up->WhenPressed(new PositionCommand(COMMAND_PORTCULIS_UP));
 	pos_store->WhileHeld(new PositionCommand(COMMAND_STORE));
 
 	SAD_up->WhileHeld(new PositionCommand(COMMAND_SAD_UP));
@@ -58,7 +58,7 @@ ButtonBoard::ButtonBoard(int port) :
 	PositionCommand *commmandSafety = new PositionCommand(COMMAND_SAFETY);
 	pos_pickup->WhenReleased(commmandSafety);
 	port_down->WhenReleased(commmandSafety);
-	port_up->WhenReleased(commmandSafety);
+	//port_up->WhenReleased(commmandSafety);
 	pos_store->WhenReleased(commmandSafety);
 }
 

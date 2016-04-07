@@ -91,7 +91,7 @@ PositionCommand::Execute() {
 			break;
 		case COMMAND_PORTCULIS_UP:
 			//position = RobotMap::degreeToPotentiometer(65);
-			position = 0.483;
+			position = 0.265;
 			break;
 		case COMMAND_PORTCULIS_DOWN:
 			//position = RobotMap::degreeToPotentiometer(8); //I set this to 0 from -0.05
