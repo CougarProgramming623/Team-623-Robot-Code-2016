@@ -168,7 +168,7 @@ RobotMap::radianToPotentiometer(double radian) {
 
 double
 RobotMap::potentiometerToDegree(double potentiometer) {
-	return (potentiometer - .097) / .004;
+	return (potentiometer - .265) / .004;
 }
 
 double

@@ -8,10 +8,6 @@
 #include "PositionCommand.h"
 #include "../Robot.h"
 
-double PositionCommand::totalUltrasonicReadings = 0;
-int PositionCommand::ultrasonicReadingsCount = 0;
-int PositionCommand::countPressed = 0; // TODO: Part of new code to move robot SAD up to safety after buttons are released
-
 PositionCommand::PositionCommand(int btnNumber) {
 	isFinished = false;
 	this->btnNumber = btnNumber;
@@ -21,8 +17,6 @@ PositionCommand::PositionCommand(int btnNumber) {
 void
 PositionCommand::Initialize() {
 	isFinished = false;
-	if(btnNumber != COMMAND_AUTO_SAFETY)
-		countPressed++;
 }
 
 bool
@@ -38,7 +32,7 @@ PositionCommand::End() {
 		Robot::robot->stopSpinners();
 
 	double angle = RobotMap::potentiometerToRadian(Robot::getPoteniometerValue());
-	DriverStation::ReportError("Angle: " + std::to_string(angle * 180 / M_PI));
+	//DriverStation::ReportError("Angle: " + std::to_string(angle * 180 / M_PI));
 
 	if(btnNumber != COMMAND_SAFETY) {
 
@@ -50,19 +44,18 @@ PositionCommand::End() {
 //			DriverStation::ReportError("Hit Threshold: ");
 //			latent_power = -.2;
 //		}
-		DriverStation::ReportError("Latent Power: " + std::to_string(latent_power));
+		//DriverStation::ReportError("Latent Power: " + std::to_string(latent_power));
 
 		Robot::subsystemBallShooter->shooterAimingDevice->Set(latent_power);
 	}
 	else
 		Robot::subsystemBallShooter->shooterAimingDevice->StopMotor();
 	isFinished = true;
-	if(btnNumber != COMMAND_AUTO_SAFETY)
-		countPressed--;
 }
 
 void
 PositionCommand::Interrupted() {
+	isFinished = true;
 	End();
 }
 
@@ -81,22 +74,28 @@ PositionCommand::Execute() {
 
 	switch (btnNumber) {
 		case COMMAND_SAFETY:
-			position = RobotMap::degreeToPotentiometer(95);
+			//position = RobotMap::degreeToPotentiometer(95);
+			position = 0.617;
 			break;
 		case COMMAND_STORE:
-			position = RobotMap::degreeToPotentiometer(45);
+			//position = RobotMap::degreeToPotentiometer(45);
+			position = 0.617;
 			break;
 		case COMMAND_AUTO_AIM:
-			position = RobotMap::degreeToPotentiometer(70);
+			//position = RobotMap::degreeToPotentiometer(70);
+			position = 0.526;
 			break;
 		case COMMAND_PICK_UP:
-			position = RobotMap::degreeToPotentiometer(8);
+			//position = RobotMap::degreeToPotentiometer(8);
+			position = 0.265;
 			break;
 		case COMMAND_PORTCULIS_UP:
-			position = RobotMap::degreeToPotentiometer(65);
+			//position = RobotMap::degreeToPotentiometer(65);
+			position = 0.483;
 			break;
 		case COMMAND_PORTCULIS_DOWN:
-			position = RobotMap::degreeToPotentiometer(8); //I set this to 0 from -0.05
+			//position = RobotMap::degreeToPotentiometer(8); //I set this to 0 from -0.05
+			position = 0.293;
 			break;
 		case COMMAND_SAD_UP:
 			position = RobotMap::potentiometer->Get() + RobotMap::degreeToPotentiometer(5);
@@ -107,7 +106,7 @@ PositionCommand::Execute() {
 				position = 0;
 			break;
 		default:
-			position = RobotMap::degreeToPotentiometer(95);
+			position = 0.617;
 			break;
 	} // TODO: Make sure bottom limit switch works, during last test the SAD would not move after reacing the Porticulis down position
 
@@ -125,13 +124,12 @@ PositionCommand::Execute() {
 	}
 
 	int sign;
-	if(speed < 0) {
+	if (speed < 0) {
 		sign = -1; // Up
 		speed = sign * cos(RobotMap::potentiometerToRadian(currentPosition)) + sign;
 		if(speed == 0)
 			speed = sign * cos(RobotMap::potentiometerToRadian(position)) + sign;
-	}
-	else if(speed > 0) {
+	} else if (speed > 0) {
 		sign = 1; // Down
 		speed = sign * pow(sin(RobotMap::potentiometerToRadian(currentPosition)) , 2) + sign;
 		if(speed == 0) {
@@ -140,10 +138,15 @@ PositionCommand::Execute() {
 	}
 
 	if(fabs(position - Robot::getPoteniometerValue()) > .01) {
-		Robot::subsystemBallShooter->shooterAimingDevice->Set(.3 * speed); //Comment
-	}
-	else {
-		End();
+		speed = 0.3 * speed;
+		DriverStation::ReportError("Target: " + std::to_string(position));
+		DriverStation::ReportError("Speed: " + std::to_string(speed));
+		DriverStation::ReportError("Potentiometer: " + std::to_string(RobotMap::potentiometer->Get()) + "\n"); //Change for debugging
+
+		Robot::subsystemBallShooter->shooterAimingDevice->Set(speed); //Comment
+	} else {
+		isFinished = true;
+		//End();
 	}
 }
 
