@@ -48,7 +48,7 @@ ShooterResetCommand::Interrupted() {
 
 void
 ShooterResetCommand::Execute() {
-	while(!isFinished) {
+	if (!isFinished) {
 		counts++;
 		if(!isBallShot && counts * .02 < 6) {
 			if(!RobotMap::limitSpinnerSpringWinder->Get()) { // Reset
