@@ -83,7 +83,7 @@ PositionCommand::Execute() {
 			break;
 		case COMMAND_AUTO_AIM:
 			//position = RobotMap::degreeToPotentiometer(70);
-			position = 0.526;
+			position = 0.500;
 			break;
 		case COMMAND_PICK_UP:
 			//position = RobotMap::degreeToPotentiometer(8);
