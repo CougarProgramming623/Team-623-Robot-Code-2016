@@ -34,7 +34,7 @@ ButtonBoard::ButtonBoard(int port) :
 
 	//Commands
 
-	shoot->WhenPressed(new ShootCommand());
+	shoot->WhileHeld(new ShootCommand());
 
 	pos_auto_aim->WhileHeld(new PositionCommand(COMMAND_AUTO_AIM));
 
