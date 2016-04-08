@@ -27,23 +27,14 @@ class PositionCommand : public Command {
 	private:
 		bool isFinished;
 		int btnNumber;
+		uint32_t led;
 	public:
-		//static time_t lastPositionClickTime;		//TODO:: Do we still need this
-		static double totalUltrasonicReadings;
-		static int ultrasonicReadingsCount ,
-		// count pressed counts how many position buttons(red and green) are pressed at the same time
-		countPressed;
 		PositionCommand(int);
-		virtual void
-		Initialize();
-		virtual void
-		Execute();
-		virtual bool
-		IsFinished();
-		virtual void
-		End();
-		virtual void
-		Interrupted();
+		virtual void Initialize();
+		virtual void Execute();
+		virtual bool IsFinished();
+		virtual void End();
+		virtual void Interrupted();
 };
 
 #endif /* SRC_COMMANDS_SHOOTCOMMAND_H_ */

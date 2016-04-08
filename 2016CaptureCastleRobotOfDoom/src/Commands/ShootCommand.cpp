@@ -19,6 +19,7 @@ void
 ShootCommand::Initialize() {
 	isBallShot = false;
 	isFinished = false;
+	Robot::oi->getBtnBoard()->EnableLEDs(LED_SHOT_COMPLETE);
 }
 
 bool
@@ -40,22 +41,18 @@ ShootCommand::Interrupted() {
 
 void
 ShootCommand::Execute() {
-//	if(!isBallShot) {
-//		if(!RobotMap::limitSpinnerSpringWinder->Get()) {		//OLD
-//	counts++;
-		if(!isBallShot) { // && counts * .02 < 6) {
-			if(!RobotMap::limitSpinnerSpringWinder->Get()) { // Reset
+	if(!isBallShot) { // && counts * .02 < 6) {
+		if(!RobotMap::limitSpinnerSpringWinder->Get()) { // Reset
 			RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kReverse);
 			Robot::robot->stopSpinners();
 			isBallShot = true;
-		}
-		else {	//Shoot
+			Robot::oi->getBtnBoard()->DisableLEDs(LED_SHOT_COMPLETE);
+		} else {	//Shoot
 			RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kForward);
 			RobotMap::ballShooterSpinnerClockwise->Set(.5);
 			RobotMap::ballShooterSpinnerCounterclockwise->Set(.5);
 		}
-	}
-	else if(RobotMap::limitSpinnerSpringWinder->Get()) {		//Stop
+	} else if(RobotMap::limitSpinnerSpringWinder->Get()) {		//Stop
 		//counts = 0;
 		RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kOff);
 	}

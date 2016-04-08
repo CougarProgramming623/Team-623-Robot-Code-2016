@@ -17,6 +17,7 @@ PositionCommand::PositionCommand(int btnNumber) {
 void
 PositionCommand::Initialize() {
 	isFinished = false;
+	Robot::oi->getBtnBoard()->ResetScoopLEDs();
 }
 
 bool
@@ -26,6 +27,8 @@ PositionCommand::IsFinished() {
 
 void
 PositionCommand::End() {
+	Robot::oi->getBtnBoard()->EnableLEDs(led);
+
 	if(btnNumber == COMMAND_PICK_UP)
 		Robot::robot->startSpinners(-.5);
 	else
@@ -76,37 +79,46 @@ PositionCommand::Execute() {
 		case COMMAND_SAFETY:
 			//position = RobotMap::degreeToPotentiometer(95);
 			position = 0.617;
+			led = LED_POS_SAFETY;
 			break;
 		case COMMAND_STORE:
 			//position = RobotMap::degreeToPotentiometer(45);
 			position = 0.617;
+			led = LED_POS_SAFETY;
 			break;
 		case COMMAND_AUTO_AIM:
 			//position = RobotMap::degreeToPotentiometer(70);
 			position = 0.500;
+			led = LED_POS_AUTO_AIM;
 			break;
 		case COMMAND_PICK_UP:
 			//position = RobotMap::degreeToPotentiometer(8);
 			position = 0.265;
+			led = LED_POS_PICK_UP;
 			break;
 		case COMMAND_PORTCULIS_UP:
 			//position = RobotMap::degreeToPotentiometer(65);
 			position = 0.265;
+			led = LED_PORTCULIS_UP;
 			break;
 		case COMMAND_PORTCULIS_DOWN:
 			//position = RobotMap::degreeToPotentiometer(8); //I set this to 0 from -0.05
 			position = 0.293;
+			led = LED_PORTCULIS_DOWN;
 			break;
 		case COMMAND_SAD_UP:
 			position = RobotMap::potentiometer->Get() + RobotMap::degreeToPotentiometer(5);
+			led = 0;
 			break;
 		case COMMAND_SAD_DOWN:
 			position = RobotMap::potentiometer->Get() - RobotMap::degreeToPotentiometer(5);
+			led = 0;
 			if(position < 0)
 				position = 0;
 			break;
 		default:
 			position = 0.617;
+			led = LED_POS_SAFETY;
 			break;
 	} // TODO: Make sure bottom limit switch works, during last test the SAD would not move after reacing the Porticulis down position
 

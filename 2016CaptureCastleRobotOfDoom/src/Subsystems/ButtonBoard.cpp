@@ -32,6 +32,9 @@ ButtonBoard::ButtonBoard(int port) :
 	port_up = new JoystickButton(this , PORT_PORTCULIS_UP);
 	port_down = new JoystickButton(this , PORT_PORTCULIS_DOWN);
 
+	outputs = 0;
+	this->SetOutputs(0);
+
 	//Commands
 
 	shoot->WhileHeld(new ShootCommand());
@@ -78,61 +81,23 @@ ButtonBoard::~ButtonBoard() {
 	delete port_down;
 }
 
-int
-ButtonBoard::getSADPos() {
-	if(SAD_up->Get())
-		return SAD_UP; // 1
-	else if(SAD_down->Get())
-		return SAD_DOWN; // -1
-	else
-		return SAD_NONE; // 0
+void
+ButtonBoard::ResetScoopLEDs(void)
+{
+	outputs &= ~LEDS_SCOOP;
+	this->SetOutputs(outputs);
 }
 
-int
-ButtonBoard::getPresetPos() {
-	if(pos_saftey->Get())
-		return POS_SAFTEY;
-	else if(pos_store->Get())
-		return POS_STORE;
-	else if(pos_auto_aim->Get())
-		return POS_AUTO_AIM;
-	else if(pos_pickup->Get())
-		return POS_PICK_UP;
-	else
-		return POS_NONE;
+void
+ButtonBoard::EnableLEDs(uint32_t mask)
+{
+	outputs |= mask;
+	this->SetOutputs(outputs);
 }
 
-int
-ButtonBoard::getPortPos() {
-	if(port_up->Get())
-		return PORTCULIS_UP; // 1
-	else if(port_down->Get())
-		return PORTCULIS_DOWN; // -1
-	else
-		return PORTCULIS_NONE; // 0
-}
-
-int
-ButtonBoard::getBallSpinner() {
-	if(ball_in->Get())
-		return BALL_IN; // 1
-	else if(ball_out->Get())
-		return BALL_OUT; // -1
-	else
-		return BALL_NONE; // 0
-}
-
-bool
-ButtonBoard::getScaleTower() {
-	return scale_tower->Get();
-}
-
-bool
-ButtonBoard::getShoot() {
-	return shoot->Get();
-}
-
-bool
-ButtonBoard::getArmsUpAndOut() {
-	return arms_up_and_out->Get();
+void
+ButtonBoard::DisableLEDs(uint32_t mask)
+{
+	outputs &= ~mask;
+	this->SetOutputs(outputs);
 }

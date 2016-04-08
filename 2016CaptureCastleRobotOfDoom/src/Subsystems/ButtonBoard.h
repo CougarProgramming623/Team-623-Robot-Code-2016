@@ -25,23 +25,15 @@
 #define PORT_SAD_UP 13 //SAD = Shooter Aiming Device
 #define PORT_SAD_DOWN 12
 
-#define POS_NONE 0
-#define POS_SAFTEY 1
-#define POS_STORE 2
-#define POS_AUTO_AIM 3
-#define POS_PICK_UP 4
+#define LED_PORTCULIS_DOWN (1 << 0)
+#define LED_PORTCULIS_UP (1 << 1)
+#define LED_POS_PICK_UP (1 << 2)
+#define LED_POS_AUTO_AIM (1 << 3)
+#define LED_SHOT_COMPLETE (1 << 4)
+#define LED_POS_SAFETY (1 << 5)
 
-#define SAD_UP 5
-#define SAD_DOWN -5
-#define SAD_NONE 0
-
-#define BALL_IN 6
-#define BALL_OUT -6
-#define BALL_NONE 0
-
-#define PORTCULIS_UP 7
-#define PORTCULIS_DOWN -7
-#define PORTCULIS_NONE 0
+#define LEDS_SCOOP (LED_PORTCULIS_DOWN | LED_PORTCULIS_UP | LED_POS_PICK_UP | \
+						  LED_POS_AUTO_AIM | LED_POS_SAFETY)
 
 class ButtonBoard : public Joystick {
 	private:
@@ -58,21 +50,13 @@ class ButtonBoard : public Joystick {
 		JoystickButton *pos_pickup;
 		JoystickButton *port_up;
 		JoystickButton *port_down;
+		uint32_t outputs;
 	public:
 		ButtonBoard(int port);
 		~ButtonBoard();
-
-		int
-		getSADPos();
-		int
-		getPresetPos();
-		int
-		getPortPos();
-		int
-		getBallSpinner();bool
-		getScaleTower();bool
-		getArmsUpAndOut();bool
-		getShoot();
+		void ResetScoopLEDs(void);
+		void EnableLEDs(uint32_t mask);
+		void DisableLEDs(uint32_t mask);
 };
 
 #endif /* SRC_SUBSYSTEMS_BUTTONBOARD_H_ */
