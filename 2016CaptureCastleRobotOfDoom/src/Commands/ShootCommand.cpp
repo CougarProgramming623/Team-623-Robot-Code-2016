@@ -9,6 +9,7 @@
 #include "../Robot.h"
 
 ShootCommand::ShootCommand() {
+	Requires(RobotMap::positionSubsystem);
 	isFinished = false;
 	isBallShot = true;
 	counts = 0;
@@ -41,8 +42,8 @@ void
 ShootCommand::Execute() {
 //	if(!isBallShot) {
 //		if(!RobotMap::limitSpinnerSpringWinder->Get()) {		//OLD
-	counts++;
-		if(!isBallShot && counts * .02 < 6) {
+//	counts++;
+		if(!isBallShot) { // && counts * .02 < 6) {
 			if(!RobotMap::limitSpinnerSpringWinder->Get()) { // Reset
 			RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kReverse);
 			Robot::robot->stopSpinners();
@@ -55,7 +56,7 @@ ShootCommand::Execute() {
 		}
 	}
 	else if(RobotMap::limitSpinnerSpringWinder->Get()) {		//Stop
-		counts = 0;
+		//counts = 0;
 		RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kOff);
 	}
 }

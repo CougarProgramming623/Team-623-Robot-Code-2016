@@ -9,6 +9,7 @@
 #include "PositionCommand.h"
 
 ShooterResetCommand::ShooterResetCommand() {
+	Requires(RobotMap::positionSubsystem);
 	isFinished = false;
 	isBallShot = true;
 	dontExecute = false;
@@ -36,9 +37,9 @@ ShooterResetCommand::End() {
 	isFinished = true;
 	RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kOff);
 	Robot::robot->stopSpinners();
-	Robot::positionCommand->Initialize();
-	while(!dontExecute && !Robot::positionCommand->IsFinished())
-		Robot::positionCommand->Execute();
+	//Robot::positionCommand->Initialize();
+	//while(!dontExecute && !Robot::positionCommand->IsFinished())
+	//	Robot::positionCommand->Execute();
 }
 
 void
@@ -55,14 +56,15 @@ ShooterResetCommand::Execute() {
 				RobotMap::ballShooterSpinnerSpringWinder->Set(Relay::Value::kReverse);
 				Robot::robot->stopSpinners();
 				isBallShot = true;
-			}
-			else { // Stop!!!!!
+			} else { // Stop!!!!!
+				isFinished = true;
 				End();
 				return;
 			}
 		}
 		else if(RobotMap::limitSpinnerSpringWinder->Get()) { //Stop
 			counts = 0;
+			isFinished = true;
 			End();
 			return;
 		}
