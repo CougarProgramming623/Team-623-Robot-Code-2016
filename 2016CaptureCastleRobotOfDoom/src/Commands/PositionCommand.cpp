@@ -93,7 +93,7 @@ PositionCommand::Execute() {
 			break;
 		case COMMAND_PICK_UP:
 			//position = RobotMap::degreeToPotentiometer(8);
-			position = 0.265;
+			position = 0.254;
 			led = LED_POS_PICK_UP;
 			break;
 		case COMMAND_PORTCULIS_UP:
